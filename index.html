@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>MGIT Placement Portal</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6f9;
+padding:15px;
+}
+
+h1{
+text-align:center;
+}
+
+.controls{
+margin-bottom:10px;
+}
+
+input,select{
+padding:6px;
+margin-right:10px;
+}
+
+.stats{
+margin:10px 0;
+font-weight:bold;
+}
+
+.table-container{
+overflow-x:auto;
+}
+
+table{
+border-collapse:collapse;
+width:100%;
+background:white;
+}
+
+th,td{
+border:1px solid #ccc;
+padding:6px;
+font-size:12px;
+text-align:center;
+white-space:nowrap;
+}
+
+th{
+background:#2c3e50;
+color:white;
+}
+
+tr:nth-child(even){
+background:#f2f2f2;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>MGIT Placement Records</h1>
+
+<div class="controls">
+
+<input type="text" id="search" placeholder="Search student / roll / company">
+
+<select id="batchFilter">
+<option value="">All Batches</option>
+</select>
+
+<select id="branchFilter">
+<option value="">All Branches</option>
+</select>
+
+<select id="companyFilter">
+<option value="">All Companies</option>
+</select>
+
+</div>
+
+<div class="stats">
+
+Total Offers : <span id="totalOffers">0</span> |
+Total Placed Students : <span id="placedStudents">0</span>
+
+</div>
+
+<div class="table-container">
+
+<table id="placementTable">
+<thead></thead>
+<tbody></tbody>
+</table>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+
+<script>
+
+const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vTUe0uxH1vxKCjsJsl45S2ggaF5i3gMocFZdxiSYiUviGM9_BGBC4Dl2PtSe3ucs30WL7qV-NRBS9Vi/pub?gid=539822730&single=true&output=csv";
+
+let allData=[];
+
+Papa.parse(csvURL,{
+download:true,
+header:true,
+complete:function(results){
+
+allData=results.data;
+
+buildTable(allData);
+populateFilters(allData);
+updateStats(allData);
+
+}
+});
+
+function buildTable(data){
+
+let thead=document.querySelector("#placementTable thead");
+let tbody=document.querySelector("#placementTable tbody");
+
+thead.innerHTML="";
+tbody.innerHTML="";
+
+let headers=Object.keys(data[0]);
+
+let tr=document.createElement("tr");
+
+headers.forEach(h=>{
+let th=document.createElement("th");
+th.innerText=h;
+tr.appendChild(th);
+});
+
+thead.appendChild(tr);
+
+data.forEach(row=>{
+
+let tr=document.createElement("tr");
+
+headers.forEach(h=>{
+let td=document.createElement("td");
+td.innerText=row[h];
+tr.appendChild(td);
+});
+
+tbody.appendChild(tr);
+
+});
+
+}
+
+function populateFilters(data){
+
+let batches=[...new Set(data.map(d=>d["Batch"]))];
+let branches=[...new Set(data.map(d=>d["Branch"]))];
+let companies=[...new Set(data.map(d=>d["Company Placed"]))];
+
+let batchSelect=document.getElementById("batchFilter");
+let branchSelect=document.getElementById("branchFilter");
+let companySelect=document.getElementById("companyFilter");
+
+batches.forEach(b=>{
+if(b){
+let option=document.createElement("option");
+option.value=b;
+option.text=b;
+batchSelect.appendChild(option);
+}
+});
+
+branches.forEach(b=>{
+if(b){
+let option=document.createElement("option");
+option.value=b;
+option.text=b;
+branchSelect.appendChild(option);
+}
+});
+
+companies.forEach(c=>{
+if(c){
+let option=document.createElement("option");
+option.value=c;
+option.text=c;
+companySelect.appendChild(option);
+}
+});
+
+}
+
+function updateStats(data){
+
+let totalOffers=data.length;
+
+let uniqueStudents=new Set();
+
+data.forEach(row=>{
+uniqueStudents.add(row["Roll Number"]);
+});
+
+let placedStudents=uniqueStudents.size;
+
+document.getElementById("totalOffers").innerText=totalOffers;
+document.getElementById("placedStudents").innerText=placedStudents;
+
+}
+
+function applyFilters(){
+
+let search=document.getElementById("search").value.toLowerCase();
+let batch=document.getElementById("batchFilter").value;
+let branch=document.getElementById("branchFilter").value;
+let company=document.getElementById("companyFilter").value;
+
+let filtered=allData.filter(row=>{
+
+let text=JSON.stringify(row).toLowerCase();
+
+return text.includes(search) &&
+(batch=="" || row["Batch"]==batch) &&
+(branch=="" || row["Branch"]==branch) &&
+(company=="" || row["Company Placed"]==company);
+
+});
+
+buildTable(filtered);
+updateStats(filtered);
+
+}
+
+document.getElementById("search").addEventListener("keyup",applyFilters);
+document.getElementById("batchFilter").addEventListener("change",applyFilters);
+document.getElementById("branchFilter").addEventListener("change",applyFilters);
+document.getElementById("companyFilter").addEventListener("change",applyFilters);
+
+</script>
+
+</body>
+</html>
