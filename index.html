@@ -1,23 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <title>MGIT Placement Portal</title>
+
 <style>
-body{font-family:Arial;background:#f4f6f9;padding:15px;}
-table{border-collapse:collapse;width:100%;background:white;}
-th,td{border:1px solid #ccc;padding:8px;text-align:center;}
-th{background:#2c3e50;color:white;}
+
+body{
+font-family:Arial;
+background:#f4f6f9;
+padding:15px;
+}
+
+h1{text-align:center;}
+h3{text-align:center;margin-top:-10px;}
+
+.table-container{
+overflow:auto;
+max-height:80vh;
+border:1px solid #ccc;
+}
+
+/* ✅ TABLE FIXED */
+table{
+border-collapse:collapse;
+width:100%;
+background:white;
+table-layout:auto;
+}
+
+th,td{
+border:1px solid #ccc;
+padding:8px;
+font-size:13px;
+text-align:center;
+
+/* ✅ AUTO ADJUST */
+white-space:normal;
+word-wrap:break-word;
+max-width:200px;
+}
+
+th{
+background:#2c3e50;
+color:white;
+position:sticky;
+top:0;
+z-index:2;
+}
+
+tr:nth-child(even){
+background:#f2f2f2;
+}
+
 </style>
+
 </head>
 
 <body>
 
-<h2>Placement Data (Test)</h2>
+<h1>MGIT Placement Records</h1>
+<h3>Academic Year 2025 - 2026</h3>
 
+<div class="table-container">
 <table id="placementTable">
 <thead></thead>
 <tbody></tbody>
 </table>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
 
@@ -35,20 +85,20 @@ let data = results.data.filter(row => Object.values(row).join("").trim() !== "")
 
 console.log("Data Loaded:", data);
 
-if(data.length === 0){
-  alert("No data found!");
-  return;
-}
-
 let thead=document.querySelector("#placementTable thead");
 let tbody=document.querySelector("#placementTable tbody");
 
 thead.innerHTML="";
 tbody.innerHTML="";
 
+if(data.length === 0){
+thead.innerHTML="<tr><th>No Data Found</th></tr>";
+return;
+}
+
 let headers=Object.keys(data[0]);
 
-// Create header
+// ✅ Header
 let tr=document.createElement("tr");
 headers.forEach(h=>{
 let th=document.createElement("th");
@@ -57,7 +107,7 @@ tr.appendChild(th);
 });
 thead.appendChild(tr);
 
-// Create rows
+// ✅ Rows
 data.forEach(row=>{
 let tr=document.createElement("tr");
 headers.forEach(h=>{
@@ -71,8 +121,8 @@ tbody.appendChild(tr);
 },
 
 error:function(err){
-console.error("PapaParse Error:", err);
-alert("Error loading CSV!");
+console.error("Error:", err);
+alert("Error loading data!");
 }
 
 });
