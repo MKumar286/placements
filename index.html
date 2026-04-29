@@ -173,16 +173,13 @@ batchSelect.innerHTML='<option value="">All Batches</option>';
 branchSelect.innerHTML='<option value="">All Branches</option>';
 companySelect.innerHTML='<option value="">All Companies</option>';
 natureSelect.innerHTML='<option value="">Nature of the Company</option>';
-
-/* ✅ Internship filter */
 internSelect.innerHTML='<option value="">Internship Type</option>';
-internSelect.add(new Option("No Internship","No Internship"));
-interns.forEach(i=> internSelect.add(new Option(i,i)));
 
 batches.forEach(b=> batchSelect.add(new Option(b,b)));
 branches.forEach(b=> branchSelect.add(new Option(b,b)));
 companies.forEach(c=> companySelect.add(new Option(c,c)));
-natures.forEach(n=> natureSelect.add(new Option(n,n)));  // ✅ FIXED
+natures.forEach(n=> natureSelect.add(new Option(n,n)));
+interns.forEach(i=> internSelect.add(new Option(i,i)));
 
 }
 
@@ -217,11 +214,7 @@ return text.includes(search) &&
 (branch=="" || row["Branch"]==branch) &&
 (company=="" || row["Company Placed"]==company) &&
 (nature=="" || (row[natureKey] || "").trim()==nature) &&
-(
-intern=="" || 
-(intern=="No Internship" && !(row[internKey] || "").trim()) ||
-(row[internKey] || "").trim()==intern
-);
+(intern=="" || (row[internKey] || "").trim()==intern);
 
 });
 
