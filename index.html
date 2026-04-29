@@ -5,29 +5,19 @@
 <title>MGIT Placement Portal</title>
 
 <style>
-
 body{
 font-family:Arial;
 background:#f4f6f9;
 padding:15px;
 }
-
-h1{
-text-align:center;
-}
-
-h3{
-text-align:center;
-margin-top:-10px;
-}
-
+h1{text-align:center;}
+h3{text-align:center;margin-top:-10px;}
 .controls{
 margin-bottom:15px;
 display:flex;
 flex-wrap:wrap;
 gap:10px;
 }
-
 input, select{
 padding:10px;
 font-size:16px;
@@ -36,27 +26,17 @@ height:42px;
 border-radius:6px;
 border:1px solid #ccc;
 }
-
-select option{
-font-size:15px;
-}
-
 .stats{
 margin:10px 0;
 font-weight:bold;
 font-size:16px;
 }
-
-.table-container{
-overflow-x:auto;
-}
-
+.table-container{overflow-x:auto;}
 table{
 border-collapse:collapse;
 width:100%;
 background:white;
 }
-
 th,td{
 border:1px solid #ccc;
 padding:8px;
@@ -64,16 +44,13 @@ font-size:13px;
 text-align:center;
 white-space:nowrap;
 }
-
 th{
 background:#2c3e50;
 color:white;
 }
-
 tr:nth-child(even){
 background:#f2f2f2;
 }
-
 </style>
 
 </head>
@@ -101,12 +78,10 @@ Total Placed Students : <span id="placedStudents">0</span>
 </div>
 
 <div class="table-container">
-
 <table id="placementTable">
 <thead></thead>
 <tbody></tbody>
 </table>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
@@ -127,7 +102,11 @@ complete:function(results){
 
 allData = results.data.filter(row => Object.values(row).join("").trim() !== "");
 
-// Auto detect columns
+if(allData.length === 0){
+alert("No data found");
+return;
+}
+
 let headers = Object.keys(allData[0]);
 
 natureKey = headers.find(h => h.toLowerCase().includes("nature"));
@@ -162,7 +141,6 @@ tr.appendChild(th);
 thead.appendChild(tr);
 
 data.forEach(row=>{
-
 let tr=document.createElement("tr");
 
 headers.forEach(h=>{
@@ -172,7 +150,6 @@ tr.appendChild(td);
 });
 
 tbody.appendChild(tr);
-
 });
 
 }
@@ -197,7 +174,7 @@ branchSelect.innerHTML='<option value="">All Branches</option>';
 companySelect.innerHTML='<option value="">All Companies</option>';
 natureSelect.innerHTML='<option value="">Nature of the Company</option>';
 
-/* ✅ Updated Internship Filter */
+/* ✅ Internship filter */
 internSelect.innerHTML='<option value="">Internship Type</option>';
 internSelect.add(new Option("No Internship","No Internship"));
 interns.forEach(i=> internSelect.add(new Option(i,i)));
@@ -205,7 +182,7 @@ interns.forEach(i=> internSelect.add(new Option(i,i)));
 batches.forEach(b=> batchSelect.add(new Option(b,b)));
 branches.forEach(b=> branchSelect.add(new Option(b,b)));
 companies.forEach(c=> companySelect.add(new Option(c,c)));
-natures.forEach(n=> natureSelect.add(new Option(n,n));
+natures.forEach(n=> natureSelect.add(new Option(n,n)));  // ✅ FIXED
 
 }
 
@@ -214,7 +191,6 @@ function updateStats(data){
 document.getElementById("totalOffers").innerText=data.length;
 
 let uniqueStudents=new Set();
-
 data.forEach(row=>{
 uniqueStudents.add(row["Roll Number"]);
 });
