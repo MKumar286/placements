@@ -228,14 +228,14 @@ natureSelect.innerHTML='<option value="">Nature of the Company</option>';
 internSelect.innerHTML='<option value="">Internship Type</option>';
 genderSelect.innerHTML='<option value="">All Genders</option>';
 
-batches.forEach(b=> batchSelect.add(new Option(b,b)));
-branches.forEach(b=> branchSelect.add(new Option(b,b)));
-companies.forEach(c=> companySelect.add(new Option(c,c)));
-natures.forEach(n=> natureSelect.add(new Option(n,n)));
-interns.forEach(i=> internSelect.add(new Option(i,i)));
+batches.sort().forEach(b=> batchSelect.add(new Option(b,b)));
+branches.sort().forEach(b=> branchSelect.add(new Option(b,b)));
+companies.sort().forEach(c=> companySelect.add(new Option(c,c)));
+natures.sort().forEach(n=> natureSelect.add(new Option(n,n)));
+interns.sort().forEach(i=> internSelect.add(new Option(i,i)));
 
 // ✅ Populate gender
-genders.forEach(g=> genderSelect.add(new Option(g,g)));
+genders.sort().forEach(g=> genderSelect.add(new Option(g,g)));
 
 }
 
