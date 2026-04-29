@@ -133,21 +133,9 @@ let headers=Object.keys(data[0]);
 let tr=document.createElement("tr");
 
 headers.forEach(h=>{
-let td=document.createElement("td");
-
-let value = row[h] ? row[h].toString().trim() : "";
-
-if(value.startsWith("http")){
-    let a = document.createElement("a");
-    a.href = value;
-    a.target = "_blank";
-    a.innerText = "View Offer Letter";
-    td.appendChild(a);
-}else{
-    td.innerText = value;
-}
-
-tr.appendChild(td);
+let th=document.createElement("th");
+th.innerText=h;
+tr.appendChild(th);
 });
 
 thead.appendChild(tr);
@@ -157,17 +145,7 @@ let tr=document.createElement("tr");
 
 headers.forEach(h=>{
 let td=document.createElement("td");
-let value = row[h];
-
-if(typeof value === "string" && value.startsWith("http")){
-    let a = document.createElement("a");
-    a.href = value;
-    a.target = "_blank";
-    a.innerText = "View Offer Letter";
-    td.appendChild(a);
-}else{
-    td.innerText = value;
-}
+td.innerText=row[h];   // 🔹 Original (no link handling)
 tr.appendChild(td);
 });
 
