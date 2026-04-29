@@ -1,131 +1,248 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<title>MGIT Placement Portal</title>
+<meta charset="UTF-8">
+<title>Placement Data</title>
 
 <style>
-
 body{
-font-family:Arial;
-background:#f4f6f9;
-padding:15px;
+  font-family: Arial;
+  margin:20px;
 }
 
-h1{text-align:center;}
-h3{text-align:center;margin-top:-10px;}
+.filters{
+  margin-bottom:10px;
+}
+
+select, input{
+  padding:6px;
+  margin-right:10px;
+  margin-bottom:10px;
+}
+
+.stats{
+  font-weight:bold;
+  margin-bottom:10px;
+}
 
 .table-container{
-overflow:auto;
-max-height:80vh;
-border:1px solid #ccc;
+  overflow:auto;
+  max-height:80vh;
+  border:1px solid #ccc;
 }
 
-/* ✅ TABLE FIXED */
 table{
-border-collapse:collapse;
-width:100%;
-background:white;
-table-layout:auto;
+  border-collapse:collapse;
+  width:max-content;
+  min-width:100%;
+  background:white;
 }
 
-th,td{
-border:1px solid #ccc;
-padding:8px;
-font-size:13px;
-text-align:center;
-
-/* ✅ AUTO ADJUST */
-white-space:normal;
-word-wrap:break-word;
-max-width:200px;
+th, td{
+  border:1px solid #ccc;
+  padding:8px;
+  font-size:13px;
+  text-align:left;
+  white-space:nowrap;
 }
 
 th{
-background:#2c3e50;
-color:white;
-position:sticky;
-top:0;
-z-index:2;
+  background:#2c3e50;
+  color:white;
 }
 
 tr:nth-child(even){
-background:#f2f2f2;
+  background:#f2f2f2;
 }
-
 </style>
 
 </head>
 
 <body>
 
-<h1>MGIT Placement Records</h1>
-<h3>Academic Year 2025 - 2026</h3>
+<h2>Placement Data</h2>
 
-<div class="table-container">
-<table id="placementTable">
-<thead></thead>
-<tbody></tbody>
-</table>
+<div class="filters">
+
+  🔍 <input type="text" id="searchBox" placeholder="Search entire data...">
+
+  <br>
+
+  <select id="batchFilter"><option value="">Batch</option></select>
+  <select id="branchFilter"><option value="">Branch</option></select>
+  <select id="companyFilter"><option value="">Company Placed</option></select>
+  <select id="natureFilter"><option value="">Nature of Company</option></select>
+
+  <select id="internshipFilter">
+    <option value="">Internship Type</option>
+    <option>Paid</option>
+    <option>Unpaid</option>
+    <option>No Internship</option>
+  </select>
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+<!-- ✅ STATS ADDED HERE -->
+<div class="stats">
+  Total Offers: <span id="totalOffers">0</span> |
+  Total Placed Students: <span id="totalStudents">0</span>
+</div>
+
+<div class="table-container">
+  <table id="dataTable">
+    <thead></thead>
+    <tbody></tbody>
+  </table>
+</div>
 
 <script>
 
-const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSlQ0WjFcZaI2eiKVtAqynVqs3H82MznXaV15n-qLjsDv6QL75g_7sQAhm0n6ZtiiDVKIB0MkuTNQ64/pub?gid=492329818&single=true&output=csv";
+const sheetURL = "PASTE_YOUR_GOOGLE_SHEET_CSV_LINK_HERE";
 
-Papa.parse(csvURL,{
-download:true,
-header:true,
+let fullData = [];
+let headers = [];
 
-complete:function(results){
+let batchKey="", branchKey="", companyKey="", natureKey="", internKey="", rollKey="";
 
-let data = results.data.filter(row => Object.values(row).join("").trim() !== "");
+fetch(sheetURL)
+.then(res => res.text())
+.then(data => {
 
-console.log("Data Loaded:", data);
+  const rows = data.split("\n").map(r => r.split(","));
 
-let thead=document.querySelector("#placementTable thead");
-let tbody=document.querySelector("#placementTable tbody");
+  headers = rows[0];
+  fullData = rows.slice(1).filter(r => r.length > 1);
 
-thead.innerHTML="";
-tbody.innerHTML="";
+  // 🔍 Auto-detect columns
+  batchKey   = headers.find(h => h.toLowerCase().includes("batch"));
+  branchKey  = headers.find(h => h.toLowerCase().includes("branch"));
+  companyKey = headers.find(h => h.toLowerCase().includes("company"));
+  natureKey  = headers.find(h => h.toLowerCase().includes("nature"));
+  internKey  = headers.find(h => h.toLowerCase().includes("intern"));
+  rollKey    = headers.find(h => h.toLowerCase().includes("roll"));
 
-if(data.length === 0){
-thead.innerHTML="<tr><th>No Data Found</th></tr>";
-return;
+  buildFilters();
+  displayTable(fullData);
+  updateStats(fullData);
+
+});
+
+function buildDropdown(key, elementId){
+
+  const index = headers.indexOf(key);
+  let set = new Set();
+
+  fullData.forEach(row=>{
+    if(row[index]) set.add(row[index]);
+  });
+
+  let values = Array.from(set).sort();
+
+  const select = document.getElementById(elementId);
+
+  values.forEach(v=>{
+    select.add(new Option(v,v));
+  });
 }
 
-let headers=Object.keys(data[0]);
-
-// ✅ Header
-let tr=document.createElement("tr");
-headers.forEach(h=>{
-let th=document.createElement("th");
-th.innerText=h;
-tr.appendChild(th);
-});
-thead.appendChild(tr);
-
-// ✅ Rows
-data.forEach(row=>{
-let tr=document.createElement("tr");
-headers.forEach(h=>{
-let td=document.createElement("td");
-td.innerText=row[h];
-tr.appendChild(td);
-});
-tbody.appendChild(tr);
-});
-
-},
-
-error:function(err){
-console.error("Error:", err);
-alert("Error loading data!");
+function buildFilters(){
+  buildDropdown(batchKey, "batchFilter");
+  buildDropdown(branchKey, "branchFilter");
+  buildDropdown(companyKey, "companyFilter");
+  buildDropdown(natureKey, "natureFilter");
 }
 
+document.querySelectorAll("select").forEach(sel=>{
+  sel.addEventListener("change", filterData);
 });
+
+document.getElementById("searchBox").addEventListener("keyup", filterData);
+
+function filterData(){
+
+  const batchVal   = document.getElementById("batchFilter").value;
+  const branchVal  = document.getElementById("branchFilter").value;
+  const companyVal = document.getElementById("companyFilter").value;
+  const natureVal  = document.getElementById("natureFilter").value;
+  const internVal  = document.getElementById("internshipFilter").value;
+  const searchVal  = document.getElementById("searchBox").value.toLowerCase();
+
+  const batchIndex   = headers.indexOf(batchKey);
+  const branchIndex  = headers.indexOf(branchKey);
+  const companyIndex = headers.indexOf(companyKey);
+  const natureIndex  = headers.indexOf(natureKey);
+  const internIndex  = headers.indexOf(internKey);
+
+  let filtered = fullData.filter(row => {
+
+    let match = true;
+
+    if(batchVal)   match &= row[batchIndex] === batchVal;
+    if(branchVal)  match &= row[branchIndex] === branchVal;
+    if(companyVal) match &= row[companyIndex] === companyVal;
+    if(natureVal)  match &= row[natureIndex] === natureVal;
+
+    if(internVal){
+      if(internVal === "No Internship"){
+        match &= !row[internIndex] || row[internIndex].trim()==="";
+      }else{
+        match &= row[internIndex] === internVal;
+      }
+    }
+
+    if(searchVal){
+      let rowText = row.join(" ").toLowerCase();
+      match &= rowText.includes(searchVal);
+    }
+
+    return match;
+
+  });
+
+  displayTable(filtered);
+  updateStats(filtered);
+}
+
+function updateStats(data){
+
+  document.getElementById("totalOffers").innerText = data.length;
+
+  const rollIndex = headers.indexOf(rollKey);
+  let unique = new Set();
+
+  data.forEach(row=>{
+    if(row[rollIndex]) unique.add(row[rollIndex]);
+  });
+
+  document.getElementById("totalStudents").innerText = unique.size;
+}
+
+function displayTable(data){
+
+  const thead = document.querySelector("#dataTable thead");
+  const tbody = document.querySelector("#dataTable tbody");
+
+  thead.innerHTML="";
+  tbody.innerHTML="";
+
+  let headerRow="<tr>";
+  headers.forEach(h=>{
+    headerRow+=`<th>${h}</th>`;
+  });
+  headerRow+="</tr>";
+
+  thead.innerHTML=headerRow;
+
+  data.forEach(row=>{
+    let tr="<tr>";
+    row.forEach(cell=>{
+      tr+=`<td>${cell}</td>`;
+    });
+    tr+="</tr>";
+    tbody.innerHTML+=tr;
+  });
+
+}
 
 </script>
 
