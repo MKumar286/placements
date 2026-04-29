@@ -133,9 +133,21 @@ let headers=Object.keys(data[0]);
 let tr=document.createElement("tr");
 
 headers.forEach(h=>{
-let th=document.createElement("th");
-th.innerText=h;
-tr.appendChild(th);
+let td=document.createElement("td");
+
+let value = row[h] ? row[h].toString().trim() : "";
+
+if(value.startsWith("http")){
+    let a = document.createElement("a");
+    a.href = value;
+    a.target = "_blank";
+    a.innerText = "View Offer Letter";
+    td.appendChild(a);
+}else{
+    td.innerText = value;
+}
+
+tr.appendChild(td);
 });
 
 thead.appendChild(tr);
