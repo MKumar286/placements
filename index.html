@@ -145,7 +145,17 @@ let tr=document.createElement("tr");
 
 headers.forEach(h=>{
 let td=document.createElement("td");
-td.innerText=row[h];
+let value = row[h];
+
+if(typeof value === "string" && value.startsWith("http")){
+    let a = document.createElement("a");
+    a.href = value;
+    a.target = "_blank";
+    a.innerText = "View Offer Letter";
+    td.appendChild(a);
+}else{
+    td.innerText = value;
+}
 tr.appendChild(td);
 });
 
