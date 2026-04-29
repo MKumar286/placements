@@ -62,7 +62,6 @@ tr:nth-child(even){
 background:#f2f2f2;
 }
 
-/* 🔥 Button Style */
 .link-btn{
 background:#2c3e50;
 color:white;
@@ -101,7 +100,6 @@ Total Placed Students : <span id="placedStudents">0</span>
 <select id="natureFilter"><option value="">Nature of the Company</option></select>
 <select id="internFilter"><option value="">Internship Type</option></select>
 <select id="genderFilter"><option value="">All Genders</option></select>
-
 
 </div>
 
@@ -179,7 +177,6 @@ if(value.includes("http")){
     a.target = "_blank";
     a.className = "link-btn";
 
-    // 🔥 Detect column
     if(h.toLowerCase().includes("intern")){
         a.innerText = "📄 Internship";
     }
@@ -214,23 +211,31 @@ let companies=[...new Set(data.map(d=>d["Company Placed"]))];
 let natures=[...new Set(data.map(d => (d[natureKey] || "").trim()).filter(v=>v))];
 let interns=[...new Set(data.map(d => (d[internKey] || "").trim()).filter(v=>v))];
 
+// ✅ Gender added
+let genders=[...new Set(data.map(d => (d["Gender"] || "").trim()).filter(v=>v))];
+
 let batchSelect=document.getElementById("batchFilter");
 let branchSelect=document.getElementById("branchFilter");
 let companySelect=document.getElementById("companyFilter");
 let natureSelect=document.getElementById("natureFilter");
 let internSelect=document.getElementById("internFilter");
+let genderSelect=document.getElementById("genderFilter");
 
 batchSelect.innerHTML='<option value="">All Batches</option>';
 branchSelect.innerHTML='<option value="">All Branches</option>';
 companySelect.innerHTML='<option value="">All Companies</option>';
 natureSelect.innerHTML='<option value="">Nature of the Company</option>';
 internSelect.innerHTML='<option value="">Internship Type</option>';
+genderSelect.innerHTML='<option value="">All Genders</option>';
 
 batches.forEach(b=> batchSelect.add(new Option(b,b)));
 branches.forEach(b=> branchSelect.add(new Option(b,b)));
 companies.forEach(c=> companySelect.add(new Option(c,c)));
 natures.forEach(n=> natureSelect.add(new Option(n,n)));
 interns.forEach(i=> internSelect.add(new Option(i,i)));
+
+// ✅ Populate gender
+genders.forEach(g=> genderSelect.add(new Option(g,g)));
 
 }
 
@@ -257,6 +262,9 @@ let company=document.getElementById("companyFilter").value;
 let nature=document.getElementById("natureFilter").value;
 let intern=document.getElementById("internFilter").value;
 
+// ✅ Gender variable
+let gender=document.getElementById("genderFilter").value;
+
 let filtered=allData.filter(row=>{
 
 let text=JSON.stringify(row).toLowerCase();
@@ -266,7 +274,10 @@ return text.includes(search) &&
 (branch=="" || row["Branch"]==branch) &&
 (company=="" || row["Company Placed"]==company) &&
 (nature=="" || (row[natureKey] || "").trim()==nature) &&
-(intern=="" || (row[internKey] || "").trim()==intern);
+(intern=="" || (row[internKey] || "").trim()==intern) &&
+
+// ✅ Gender condition
+(gender=="" || (row["Gender"] || "").trim()==gender);
 
 });
 
@@ -281,6 +292,9 @@ document.getElementById("branchFilter").addEventListener("change",applyFilters);
 document.getElementById("companyFilter").addEventListener("change",applyFilters);
 document.getElementById("natureFilter").addEventListener("change",applyFilters);
 document.getElementById("internFilter").addEventListener("change",applyFilters);
+
+// ✅ Gender event
+document.getElementById("genderFilter").addEventListener("change",applyFilters);
 
 </script>
 
