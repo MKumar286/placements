@@ -119,7 +119,7 @@ allData = results.data.filter(row => Object.values(row).join("").trim() !== "");
 let headers = Object.keys(allData[0]);
 
 natureKey = headers.find(h => h.toLowerCase().includes("nature"));
-internKey = headers.find(h => h.toLowerCase().includes("paid"));
+internKey = headers.find(h => h.toLowerCase().includes("intern"));
 
 buildTable(allData);
 populateFilters(allData);
