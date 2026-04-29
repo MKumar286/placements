@@ -73,15 +73,30 @@ Total Offers : <span id="totalOffers">0</span> |
 Total Placed Students : <span id="placedStudents">0</span>
 </div>
 
+<!-- ✅ FILTERS -->
 <div class="controls">
 
 <input type="text" id="search" placeholder="Search student / roll / company">
 
-<select id="batchFilter"><option value="">All Batches</option></select>
-<select id="branchFilter"><option value="">All Branches</option></select>
-<select id="companyFilter"><option value="">All Companies</option></select>
-<select id="natureFilter"><option value="">Nature of the Company</option></select>
-<select id="internFilter"><option value="">Internship type</option></select>
+<select id="batchFilter">
+<option value="">All Batches</option>
+</select>
+
+<select id="branchFilter">
+<option value="">All Branches</option>
+</select>
+
+<select id="companyFilter">
+<option value="">All Companies</option>
+</select>
+
+<select id="natureFilter">
+<option value="">Nature of the Company</option>
+</select>
+
+<select id="internFilter">
+<option value="">Internship type</option>
+</select>
 
 </div>
 
@@ -180,7 +195,7 @@ companies.forEach(c=> companySelect.add(new Option(c,c)));
 natures.forEach(n=> natureSelect.add(new Option(n,n)));
 
 
-// 🔥 Internship Filter (FINAL)
+// ✅ Internship Filter (FINAL)
 internSelect.innerHTML = '<option value="">Internship type</option>';
 internSelect.add(new Option("Paid", "Paid"));
 internSelect.add(new Option("Unpaid", "Unpaid"));
