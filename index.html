@@ -12,14 +12,8 @@ background:#f4f6f9;
 padding:15px;
 }
 
-h1{
-text-align:center;
-}
-
-h3{
-text-align:center;
-margin-top:-10px;
-}
+h1{text-align:center;}
+h3{text-align:center;margin-top:-10px;}
 
 .controls{
 margin-bottom:15px;
@@ -37,19 +31,13 @@ border-radius:6px;
 border:1px solid #ccc;
 }
 
-select option{
-font-size:15px;
-}
-
 .stats{
 margin:10px 0;
 font-weight:bold;
 font-size:16px;
 }
 
-.table-container{
-overflow-x:auto;
-}
+.table-container{overflow-x:auto;}
 
 table{
 border-collapse:collapse;
@@ -72,6 +60,21 @@ color:white;
 
 tr:nth-child(even){
 background:#f2f2f2;
+}
+
+/* 🔥 Button Style */
+.link-btn{
+background:#2c3e50;
+color:white;
+padding:5px 10px;
+border-radius:5px;
+text-decoration:none;
+font-size:12px;
+display:inline-block;
+}
+
+.link-btn:hover{
+background:#1a252f;
 }
 
 </style>
@@ -101,12 +104,10 @@ Total Placed Students : <span id="placedStudents">0</span>
 </div>
 
 <div class="table-container">
-
 <table id="placementTable">
 <thead></thead>
 <tbody></tbody>
 </table>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
@@ -127,7 +128,6 @@ complete:function(results){
 
 allData = results.data.filter(row => Object.values(row).join("").trim() !== "");
 
-// Auto detect columns
 let headers = Object.keys(allData[0]);
 
 natureKey = headers.find(h => h.toLowerCase().includes("nature"));
@@ -170,31 +170,27 @@ let td=document.createElement("td");
 
 let value = row[h] ? row[h].toString().trim() : "";
 
-let value = row[h] ? row[h].toString().trim() : "";
-
 if(value.includes("http")){
 
     let a = document.createElement("a");
     a.href = value;
     a.target = "_blank";
+    a.className = "link-btn";
 
-    // 👇 Detect column name
+    // 🔥 Detect column
     if(h.toLowerCase().includes("intern")){
-        a.innerText = "View Internship Letter";
+        a.innerText = "📄 Internship";
     }
     else if(h.toLowerCase().includes("offer")){
-        a.innerText = "View Offer Letter";
+        a.innerText = "📄 Offer";
     }
     else{
-        a.innerText = "View Document";
+        a.innerText = "📄 View";
     }
 
     td.appendChild(a);
 
 }else{
-    td.innerText = value;
-}
-else{
     td.innerText = value;
 }
 
