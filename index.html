@@ -1,248 +1,265 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Placement Data</title>
+
+<title>MGIT Placement Portal</title>
 
 <style>
+
 body{
-  font-family: Arial;
-  margin:20px;
+font-family:Arial;
+background:#f4f6f9;
+padding:15px;
 }
 
-.filters{
-  margin-bottom:10px;
+h1{
+text-align:center;
 }
 
-select, input{
-  padding:6px;
-  margin-right:10px;
-  margin-bottom:10px;
+h3{
+text-align:center;
+margin-top:-10px;
+}
+
+.controls{
+margin-bottom:15px;
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+}
+
+input, select{
+padding:10px;
+font-size:16px;
+min-width:180px;
+height:42px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+select option{
+font-size:15px;
 }
 
 .stats{
-  font-weight:bold;
-  margin-bottom:10px;
+margin:10px 0;
+font-weight:bold;
+font-size:16px;
 }
 
 .table-container{
-  overflow:auto;
-  max-height:80vh;
-  border:1px solid #ccc;
+overflow-x:auto;
 }
 
 table{
-  border-collapse:collapse;
-  width:max-content;
-  min-width:100%;
-  background:white;
+border-collapse:collapse;
+width:100%;
+background:white;
 }
 
-th, td{
-  border:1px solid #ccc;
-  padding:8px;
-  font-size:13px;
-  text-align:left;
-  white-space:nowrap;
+th,td{
+border:1px solid #ccc;
+padding:8px;
+font-size:13px;
+text-align:center;
+white-space:nowrap;
 }
 
 th{
-  background:#2c3e50;
-  color:white;
+background:#2c3e50;
+color:white;
 }
 
 tr:nth-child(even){
-  background:#f2f2f2;
+background:#f2f2f2;
 }
+
 </style>
 
 </head>
 
 <body>
 
-<h2>Placement Data</h2>
+<h1>MGIT Placement Records</h1>
+<h3>Academic Year 2025 - 2026</h3>
 
-<div class="filters">
-
-  🔍 <input type="text" id="searchBox" placeholder="Search entire data...">
-
-  <br>
-
-  <select id="batchFilter"><option value="">Batch</option></select>
-  <select id="branchFilter"><option value="">Branch</option></select>
-  <select id="companyFilter"><option value="">Company Placed</option></select>
-  <select id="natureFilter"><option value="">Nature of Company</option></select>
-
-  <select id="internshipFilter">
-    <option value="">Internship Type</option>
-    <option>Paid</option>
-    <option>Unpaid</option>
-    <option>No Internship</option>
-  </select>
-
+<div class="stats">
+Total Offers : <span id="totalOffers">0</span> |
+Total Placed Students : <span id="placedStudents">0</span>
 </div>
 
-<!-- ✅ STATS ADDED HERE -->
-<div class="stats">
-  Total Offers: <span id="totalOffers">0</span> |
-  Total Placed Students: <span id="totalStudents">0</span>
+<div class="controls">
+
+<input type="text" id="search" placeholder="Search student / roll / company">
+
+<select id="batchFilter"><option value="">All Batches</option></select>
+<select id="branchFilter"><option value="">All Branches</option></select>
+<select id="companyFilter"><option value="">All Companies</option></select>
+<select id="natureFilter"><option value="">Nature of the Company</option></select>
+<select id="internFilter"><option value="">Internship Type</option></select>
+
 </div>
 
 <div class="table-container">
-  <table id="dataTable">
-    <thead></thead>
-    <tbody></tbody>
-  </table>
+
+<table id="placementTable">
+<thead></thead>
+<tbody></tbody>
+</table>
+
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
 
 <script>
 
-const sheetURL = "PASTE_YOUR_GOOGLE_SHEET_CSV_LINK_HERE";
+const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSlQ0WjFcZaI2eiKVtAqynVqs3H82MznXaV15n-qLjsDv6QL75g_7sQAhm0n6ZtiiDVKIB0MkuTNQ64/pub?gid=492329818&single=true&output=csv";
 
-let fullData = [];
-let headers = [];
+let allData=[];
+let natureKey="";
+let internKey="";
 
-let batchKey="", branchKey="", companyKey="", natureKey="", internKey="", rollKey="";
+Papa.parse(csvURL,{
+download:true,
+header:true,
 
-fetch(sheetURL)
-.then(res => res.text())
-.then(data => {
+complete:function(results){
 
-  const rows = data.split("\n").map(r => r.split(","));
+allData = results.data.filter(row => Object.values(row).join("").trim() !== "");
 
-  headers = rows[0];
-  fullData = rows.slice(1).filter(r => r.length > 1);
+// Auto detect columns
+let headers = Object.keys(allData[0]);
 
-  // 🔍 Auto-detect columns
-  batchKey   = headers.find(h => h.toLowerCase().includes("batch"));
-  branchKey  = headers.find(h => h.toLowerCase().includes("branch"));
-  companyKey = headers.find(h => h.toLowerCase().includes("company"));
-  natureKey  = headers.find(h => h.toLowerCase().includes("nature"));
-  internKey  = headers.find(h => h.toLowerCase().includes("intern"));
-  rollKey    = headers.find(h => h.toLowerCase().includes("roll"));
+natureKey = headers.find(h => h.toLowerCase().includes("nature"));
+internKey = headers.find(h => h.toLowerCase().includes("paid"));
 
-  buildFilters();
-  displayTable(fullData);
-  updateStats(fullData);
+buildTable(allData);
+populateFilters(allData);
+updateStats(allData);
+
+}
 
 });
 
-function buildDropdown(key, elementId){
+function buildTable(data){
 
-  const index = headers.indexOf(key);
-  let set = new Set();
+let thead=document.querySelector("#placementTable thead");
+let tbody=document.querySelector("#placementTable tbody");
 
-  fullData.forEach(row=>{
-    if(row[index]) set.add(row[index]);
-  });
+thead.innerHTML="";
+tbody.innerHTML="";
 
-  let values = Array.from(set).sort();
+let headers=Object.keys(data[0]);
 
-  const select = document.getElementById(elementId);
+let tr=document.createElement("tr");
 
-  values.forEach(v=>{
-    select.add(new Option(v,v));
-  });
-}
-
-function buildFilters(){
-  buildDropdown(batchKey, "batchFilter");
-  buildDropdown(branchKey, "branchFilter");
-  buildDropdown(companyKey, "companyFilter");
-  buildDropdown(natureKey, "natureFilter");
-}
-
-document.querySelectorAll("select").forEach(sel=>{
-  sel.addEventListener("change", filterData);
+headers.forEach(h=>{
+let th=document.createElement("th");
+th.innerText=h;
+tr.appendChild(th);
 });
 
-document.getElementById("searchBox").addEventListener("keyup", filterData);
+thead.appendChild(tr);
 
-function filterData(){
+data.forEach(row=>{
 
-  const batchVal   = document.getElementById("batchFilter").value;
-  const branchVal  = document.getElementById("branchFilter").value;
-  const companyVal = document.getElementById("companyFilter").value;
-  const natureVal  = document.getElementById("natureFilter").value;
-  const internVal  = document.getElementById("internshipFilter").value;
-  const searchVal  = document.getElementById("searchBox").value.toLowerCase();
+let tr=document.createElement("tr");
 
-  const batchIndex   = headers.indexOf(batchKey);
-  const branchIndex  = headers.indexOf(branchKey);
-  const companyIndex = headers.indexOf(companyKey);
-  const natureIndex  = headers.indexOf(natureKey);
-  const internIndex  = headers.indexOf(internKey);
+headers.forEach(h=>{
+let td=document.createElement("td");
+td.innerText=row[h];
+tr.appendChild(td);
+});
 
-  let filtered = fullData.filter(row => {
+tbody.appendChild(tr);
 
-    let match = true;
+});
 
-    if(batchVal)   match &= row[batchIndex] === batchVal;
-    if(branchVal)  match &= row[branchIndex] === branchVal;
-    if(companyVal) match &= row[companyIndex] === companyVal;
-    if(natureVal)  match &= row[natureIndex] === natureVal;
+}
 
-    if(internVal){
-      if(internVal === "No Internship"){
-        match &= !row[internIndex] || row[internIndex].trim()==="";
-      }else{
-        match &= row[internIndex] === internVal;
-      }
-    }
+function populateFilters(data){
 
-    if(searchVal){
-      let rowText = row.join(" ").toLowerCase();
-      match &= rowText.includes(searchVal);
-    }
+let batches=[...new Set(data.map(d=>d["Batch"]))];
+let branches=[...new Set(data.map(d=>d["Branch"]))];
+let companies=[...new Set(data.map(d=>d["Company Placed"]))];
 
-    return match;
+let natures=[...new Set(data.map(d => (d[natureKey] || "").trim()).filter(v=>v))];
+let interns=[...new Set(data.map(d => (d[internKey] || "").trim()).filter(v=>v))];
 
-  });
+let batchSelect=document.getElementById("batchFilter");
+let branchSelect=document.getElementById("branchFilter");
+let companySelect=document.getElementById("companyFilter");
+let natureSelect=document.getElementById("natureFilter");
+let internSelect=document.getElementById("internFilter");
 
-  displayTable(filtered);
-  updateStats(filtered);
+batchSelect.innerHTML='<option value="">All Batches</option>';
+branchSelect.innerHTML='<option value="">All Branches</option>';
+companySelect.innerHTML='<option value="">All Companies</option>';
+natureSelect.innerHTML='<option value="">Nature of the Company</option>';
+
+/* ✅ Updated Internship Filter */
+internSelect.innerHTML='<option value="">Internship Type</option>';
+internSelect.add(new Option("No Internship","No Internship"));
+interns.forEach(i=> internSelect.add(new Option(i,i)));
+
+batches.forEach(b=> batchSelect.add(new Option(b,b)));
+branches.forEach(b=> branchSelect.add(new Option(b,b)));
+companies.forEach(c=> companySelect.add(new Option(c,c)));
+natures.forEach(n=> natureSelect.add(new Option(n,n));
+
 }
 
 function updateStats(data){
 
-  document.getElementById("totalOffers").innerText = data.length;
+document.getElementById("totalOffers").innerText=data.length;
 
-  const rollIndex = headers.indexOf(rollKey);
-  let unique = new Set();
+let uniqueStudents=new Set();
 
-  data.forEach(row=>{
-    if(row[rollIndex]) unique.add(row[rollIndex]);
-  });
+data.forEach(row=>{
+uniqueStudents.add(row["Roll Number"]);
+});
 
-  document.getElementById("totalStudents").innerText = unique.size;
-}
-
-function displayTable(data){
-
-  const thead = document.querySelector("#dataTable thead");
-  const tbody = document.querySelector("#dataTable tbody");
-
-  thead.innerHTML="";
-  tbody.innerHTML="";
-
-  let headerRow="<tr>";
-  headers.forEach(h=>{
-    headerRow+=`<th>${h}</th>`;
-  });
-  headerRow+="</tr>";
-
-  thead.innerHTML=headerRow;
-
-  data.forEach(row=>{
-    let tr="<tr>";
-    row.forEach(cell=>{
-      tr+=`<td>${cell}</td>`;
-    });
-    tr+="</tr>";
-    tbody.innerHTML+=tr;
-  });
+document.getElementById("placedStudents").innerText=uniqueStudents.size;
 
 }
+
+function applyFilters(){
+
+let search=document.getElementById("search").value.toLowerCase();
+let batch=document.getElementById("batchFilter").value;
+let branch=document.getElementById("branchFilter").value;
+let company=document.getElementById("companyFilter").value;
+let nature=document.getElementById("natureFilter").value;
+let intern=document.getElementById("internFilter").value;
+
+let filtered=allData.filter(row=>{
+
+let text=JSON.stringify(row).toLowerCase();
+
+return text.includes(search) &&
+(batch=="" || row["Batch"]==batch) &&
+(branch=="" || row["Branch"]==branch) &&
+(company=="" || row["Company Placed"]==company) &&
+(nature=="" || (row[natureKey] || "").trim()==nature) &&
+(
+intern=="" || 
+(intern=="No Internship" && !(row[internKey] || "").trim()) ||
+(row[internKey] || "").trim()==intern
+);
+
+});
+
+buildTable(filtered);
+updateStats(filtered);
+
+}
+
+document.getElementById("search").addEventListener("keyup",applyFilters);
+document.getElementById("batchFilter").addEventListener("change",applyFilters);
+document.getElementById("branchFilter").addEventListener("change",applyFilters);
+document.getElementById("companyFilter").addEventListener("change",applyFilters);
+document.getElementById("natureFilter").addEventListener("change",applyFilters);
+document.getElementById("internFilter").addEventListener("change",applyFilters);
 
 </script>
 
