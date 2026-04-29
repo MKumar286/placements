@@ -33,14 +33,22 @@ complete:function(results){
 
 let data = results.data.filter(row => Object.values(row).join("").trim() !== "");
 
-console.log("DATA:", data);
+console.log("Data Loaded:", data);
+
+if(data.length === 0){
+  alert("No data found!");
+  return;
+}
 
 let thead=document.querySelector("#placementTable thead");
 let tbody=document.querySelector("#placementTable tbody");
 
+thead.innerHTML="";
+tbody.innerHTML="";
+
 let headers=Object.keys(data[0]);
 
-// Header
+// Create header
 let tr=document.createElement("tr");
 headers.forEach(h=>{
 let th=document.createElement("th");
@@ -49,7 +57,7 @@ tr.appendChild(th);
 });
 thead.appendChild(tr);
 
-// Rows
+// Create rows
 data.forEach(row=>{
 let tr=document.createElement("tr");
 headers.forEach(h=>{
@@ -60,6 +68,11 @@ tr.appendChild(td);
 tbody.appendChild(tr);
 });
 
+},
+
+error:function(err){
+console.error("PapaParse Error:", err);
+alert("Error loading CSV!");
 }
 
 });
