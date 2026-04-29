@@ -127,14 +127,11 @@ complete:function(results){
 
 allData = results.data.filter(row => Object.values(row).join("").trim() !== "");
 
-// ✅ Auto detect columns
+// Auto detect columns
 let headers = Object.keys(allData[0]);
 
 natureKey = headers.find(h => h.toLowerCase().includes("nature"));
 internKey = headers.find(h => h.toLowerCase().includes("paid"));
-
-console.log("Nature Column:", natureKey);
-console.log("Intern Column:", internKey);
 
 buildTable(allData);
 populateFilters(allData);
@@ -170,9 +167,10 @@ let tr=document.createElement("tr");
 
 headers.forEach(h=>{
 let td=document.createElement("td");
+
 let value = row[h] ? row[h].toString().trim() : "";
 
-if(value.startsWith("http")){
+if(value.includes("http")){
     let a = document.createElement("a");
     a.href = value;
     a.target = "_blank";
@@ -181,6 +179,7 @@ if(value.startsWith("http")){
 }else{
     td.innerText = value;
 }
+
 tr.appendChild(td);
 });
 
@@ -209,7 +208,7 @@ batchSelect.innerHTML='<option value="">All Batches</option>';
 branchSelect.innerHTML='<option value="">All Branches</option>';
 companySelect.innerHTML='<option value="">All Companies</option>';
 natureSelect.innerHTML='<option value="">Nature of the Company</option>';
-internSelect.innerHTML='<option value="">Internship type</option>';
+internSelect.innerHTML='<option value="">Internship Type</option>';
 
 batches.forEach(b=> batchSelect.add(new Option(b,b)));
 branches.forEach(b=> branchSelect.add(new Option(b,b)));
