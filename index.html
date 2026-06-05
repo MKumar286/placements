@@ -255,13 +255,23 @@ border-radius:10px;
 /* TABLE CONTAINER */
 
 .table-container{
-    width:100%;
-    overflow:auto;
-    background:#ffffff;
-    border-radius:14px;
-    box-shadow:0 8px 25px rgba(0,0,0,0.15);
-    margin-top:8px;
-    border:1px solid #dce3ea;
+
+width:100%;
+
+overflow-x:auto;
+
+overflow-y:hidden;
+
+border-radius:18px;
+
+box-shadow:0 8px 25px rgba(0,0,0,0.35);
+
+scroll-behavior:smooth;
+
+background:rgba(255,255,255,0.05);
+
+padding-bottom:6px;
+
 }
 
 /* TABLE SCROLLBAR */
@@ -297,58 +307,63 @@ background:linear-gradient(90deg,#00c6ff,#0072ff);
 /* TABLE */
 
 table{
-    border-collapse:separate;
-    border-spacing:0;
-    width:max-content;
-    min-width:100%;
-    background:#ffffff;
-    color:#1f2937;
+
+border-collapse:collapse;
+
+min-width:1600px;
+
+width:max-content;
+
+background:#ffffff;
+
+color:#222;
+
+border-radius:18px;
+
+overflow:hidden;
+
 }
 
 /* TABLE HEADER */
 
 th{
-    position:sticky;
-    top:0;
-    z-index:100;
 
-    background:#0f172a;
-    color:#ffffff;
+padding:8px 9px;
 
-    padding:10px 14px;
+font-size:13px;
 
-    font-size:12px;
-    font-weight:600;
+font-weight:bold;
 
-    text-align:center;
-    vertical-align:middle;
+text-align:center;
 
-    border:1px solid #1e293b;
+background:linear-gradient(135deg,#141e30,#243b55);
 
-    white-space:pre-line;
+color:#ffffff;
+line-height:1.3
+border:1px solid rgba(255,255,255,0.12);
 
-    line-height:1.3;
+white-space:nowrap;
 
-    letter-spacing:0.3px;
 }
 
 /* TABLE DATA */
 
 td{
-    padding:8px 12px;
 
-    font-size:12px;
-    font-weight:500;
+padding:5px 9px;
 
-    text-align:center;
-    vertical-align:middle;
+font-size:12px;
 
-    border:1px solid #e5e7eb;
+font-weight:500;
 
-    color:#1f2937;
+text-align:center;
 
-    white-space:nowrap;
+white-space:nowrap;
+
+border:1px solid rgba(16,37,66,0.12);
+
 }
+
 /* ROW COLORS */
 
 tr:nth-child(even){
