@@ -223,7 +223,6 @@ transition:0.3s;
 
 }
 
-/* Focus on inputs to look clean */
 .controls input::placeholder {
 color: #666;
 }
@@ -255,6 +254,39 @@ border-radius:10px;
 .controls::-webkit-scrollbar-thumb{
 background:linear-gradient(90deg,#00c6ff,#0072ff);
 border-radius:10px;
+}
+
+/* ACTION BAR FOR MICRO BUTTON */
+.action-bar {
+display: flex;
+justify-content: flex-end;
+margin: 8px 4px;
+}
+
+.micro-btn {
+background: linear-gradient(135deg, #1d743a, #107c41);
+color: white;
+border: 1px solid rgba(255,255,255,0.2);
+padding: 5px 12px;
+border-radius: 6px;
+font-size: 11px;
+font-weight: bold;
+cursor: pointer;
+transition: 0.2s ease;
+box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+display: flex;
+align-items: center;
+gap: 4px;
+}
+
+.micro-btn:hover {
+transform: scale(1.04);
+background: linear-gradient(135deg, #107c41, #0b592e);
+box-shadow: 0 4px 12px rgba(0,200,100,0.4);
+}
+
+.micro-btn:active {
+transform: scale(0.98);
 }
 
 /* TABLE CONTAINER */
@@ -475,6 +507,10 @@ font-size:12px;
 
 }
 
+.action-bar {
+margin: 6px 2px;
+}
+
 th{
 
 font-size:11px;
@@ -560,6 +596,11 @@ Total Placed Students :
 
 </div>
 
+<!-- Action Bar containing the Micro Excel Download button -->
+<div class="action-bar">
+<button id="downloadExcel" class="micro-btn">📥 Excel</button>
+</div>
+
 <div class="table-container">
 
 <table id="placementTable">
@@ -581,10 +622,11 @@ Total Placed Students :
 const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSlQ0WjFcZaI2eiKVtAqynVqs3H82MznXaV15n-qLjsDv6QL75g_7sQAhm0n6ZtiiDVKIB0MkuTNQ64/pub?gid=492329818&single=true&output=csv";
 
 let allData=[];
+let currentFilteredData=[]; // Track currently active filtered dataset
 
 let natureKey="";
 let internKey="";
-let salaryKey=""; // Added to track the salary column dynamically
+let salaryKey="";
 
 /* LOAD CSV */
 
@@ -620,10 +662,11 @@ internKey = headers.find(
 h => h.toLowerCase().includes("paid")
 );
 
-// Dynamically auto-detect your salary/LPA column
 salaryKey = headers.find(
 h => h.toLowerCase().includes("salary") || h.toLowerCase().includes("lpa")
 );
+
+currentFilteredData = [...allData];
 
 buildTable(allData);
 
@@ -901,7 +944,6 @@ function applyFilters(){
 let search=document.getElementById("search")
 .value.toLowerCase();
 
-// Get range boundaries
 let minSal = parseFloat(document.getElementById("minSalary").value);
 let maxSal = parseFloat(document.getElementById("maxSalary").value);
 
@@ -923,13 +965,11 @@ let filtered=allData.filter(row=>{
 
 let text=JSON.stringify(row).toLowerCase();
 
-// Parse row salary value to an absolute float
 let rowSal = NaN;
 if(salaryKey && row[salaryKey]) {
   rowSal = parseFloat(row[salaryKey].toString().replace(/[^0-9.]/g, ''));
 }
 
-// Range logic checking constraints 
 let matchesMin = isNaN(minSal) || (!isNaN(rowSal) && rowSal >= minSal);
 let matchesMax = isNaN(maxSal) || (!isNaN(rowSal) && rowSal <= maxSal);
 
@@ -955,6 +995,8 @@ return text.includes(search)
 
 });
 
+currentFilteredData = filtered; // Keep track of filtered rows globally
+
 updateCompanyFilter(filtered);
   
 buildTable(filtered);
@@ -963,12 +1005,48 @@ updateStats(filtered);
 
 }
 
+/* EXCEL DOWNLOAD FUNCTION */
+function downloadExcelFile() {
+  if (!currentFilteredData || currentFilteredData.length === 0) {
+    alert("No active records to export!");
+    return;
+  }
+  
+  let headers = Object.keys(currentFilteredData[0]);
+  let csvString = "﻿"; // Byte Order Mark for proper Excel UTF-8 representation
+  
+  // Create Headers
+  csvString += headers.map(h => `"${h.replace(/"/g, '""')}"`).join(",") + "
+";
+  
+  // Create Rows
+  currentFilteredData.forEach(row => {
+    let rowLine = headers.map(h => {
+      let value = row[h] ? row[h].toString().trim() : "";
+      return `"${value.replace(/"/g, '""')}"`;
+    });
+    csvString += rowLine.join(",") + "
+";
+  });
+  
+  // Create invisible anchor link to trigger browser download
+  let blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+  let link = document.createElement("a");
+  let url = URL.createObjectURL(blob);
+  
+  link.setAttribute("href", url);
+  link.setAttribute("download", "MGIT_Filtered_Placements.csv");
+  link.style.visibility = "hidden";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 /* EVENTS */
 
 document.getElementById("search")
 .addEventListener("keyup",applyFilters);
 
-// Interactive tracking for numeric range changes
 document.getElementById("minSalary")
 .addEventListener("input",applyFilters);
 
@@ -993,7 +1071,13 @@ document.getElementById("internFilter")
 document.getElementById("genderFilter")
 .addEventListener("change",applyFilters);
 
+// Click handler for micro download button
+document.getElementById("downloadExcel")
+.addEventListener("click", downloadExcelFile);
+
 </script>
 
 </body>
 </html>
+index.html
+Displaying index.html.
