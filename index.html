@@ -118,7 +118,7 @@ letter-spacing:1px;
 h3{
 
 font-size:18px;
-margin-top:2px
+margin-top:2px;
 font-weight:500;
 
 background:linear-gradient(90deg,#b2ff59,#00e5ff);
@@ -221,6 +221,11 @@ background:rgba(255,255,255,0.92);
 
 transition:0.3s;
 
+}
+
+/* Focus on inputs to look clean */
+.controls input::placeholder {
+color: #666;
 }
 
 /* FOCUS */
@@ -339,7 +344,7 @@ text-align:center;
 background:linear-gradient(135deg,#141e30,#243b55);
 
 color:#ffffff;
-line-height:1.3
+line-height:1.3;
 border:1px solid rgba(255,255,255,0.12);
 
 white-space:nowrap;
@@ -465,7 +470,7 @@ width:145px;
 min-width:145px;
 
 height:28px;
-padding:3px 6px
+padding:3px 6px;
 font-size:12px;
 
 }
@@ -526,6 +531,9 @@ Total Placed Students :
 
 <input type="text" id="search" placeholder="Search student / roll / company">
 
+<input type="number" id="minSalary" placeholder="Min Salary (>=)">
+<input type="number" id="maxSalary" placeholder="Max Salary (<=)">
+
 <select id="batchFilter">
 <option value="">All Batches</option>
 </select>
@@ -576,6 +584,7 @@ let allData=[];
 
 let natureKey="";
 let internKey="";
+let salaryKey=""; // Added to track the salary column dynamically
 
 /* LOAD CSV */
 
@@ -609,6 +618,11 @@ h => h.toLowerCase().includes("nature")
 
 internKey = headers.find(
 h => h.toLowerCase().includes("paid")
+);
+
+// Dynamically auto-detect your salary/LPA column
+salaryKey = headers.find(
+h => h.toLowerCase().includes("salary") || h.toLowerCase().includes("lpa")
 );
 
 buildTable(allData);
@@ -887,6 +901,10 @@ function applyFilters(){
 let search=document.getElementById("search")
 .value.toLowerCase();
 
+// Get range boundaries
+let minSal = parseFloat(document.getElementById("minSalary").value);
+let maxSal = parseFloat(document.getElementById("maxSalary").value);
+
 let batch=document.getElementById("batchFilter").value;
 
 let branch=document.getElementById("branchFilter").value;
@@ -905,7 +923,20 @@ let filtered=allData.filter(row=>{
 
 let text=JSON.stringify(row).toLowerCase();
 
+// Parse row salary value to an absolute float
+let rowSal = NaN;
+if(salaryKey && row[salaryKey]) {
+  rowSal = parseFloat(row[salaryKey].toString().replace(/[^0-9.]/g, ''));
+}
+
+// Range logic checking constraints 
+let matchesMin = isNaN(minSal) || (!isNaN(rowSal) && rowSal >= minSal);
+let matchesMax = isNaN(maxSal) || (!isNaN(rowSal) && rowSal <= maxSal);
+
 return text.includes(search)
+
+&& matchesMin
+&& matchesMax
 
 && (batch==="" || row["Batch"]===batch)
 
@@ -936,6 +967,13 @@ updateStats(filtered);
 
 document.getElementById("search")
 .addEventListener("keyup",applyFilters);
+
+// Interactive tracking for numeric range changes
+document.getElementById("minSalary")
+.addEventListener("input",applyFilters);
+
+document.getElementById("maxSalary")
+.addEventListener("input",applyFilters);
 
 document.getElementById("batchFilter")
 .addEventListener("change",applyFilters);
