@@ -224,7 +224,7 @@ transition:0.3s;
 }
 
 .controls input::placeholder {
-color: #666;
+color: #555;
 }
 
 /* FOCUS */
@@ -256,37 +256,37 @@ background:linear-gradient(90deg,#00c6ff,#0072ff);
 border-radius:10px;
 }
 
-/* ACTION BAR FOR MICRO BUTTON */
-.action-bar {
+/* EXCEL DOWNLOADING PLACEMENT STRIP */
+.action-container {
 display: flex;
 justify-content: flex-end;
-margin: 8px 4px;
+margin: 6px 4px;
 }
 
-.micro-btn {
+.micro-excel-btn {
 background: linear-gradient(135deg, #1d743a, #107c41);
 color: white;
 border: 1px solid rgba(255,255,255,0.2);
-padding: 5px 12px;
-border-radius: 6px;
+padding: 4px 10px;
+border-radius: 5px;
 font-size: 11px;
 font-weight: bold;
 cursor: pointer;
 transition: 0.2s ease;
-box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 display: flex;
 align-items: center;
 gap: 4px;
 }
 
-.micro-btn:hover {
-transform: scale(1.04);
+.micro-excel-btn:hover {
+transform: scale(1.03);
 background: linear-gradient(135deg, #107c41, #0b592e);
-box-shadow: 0 4px 12px rgba(0,200,100,0.4);
+box-shadow: 0 4px 10px rgba(0,180,90,0.4);
 }
 
-.micro-btn:active {
-transform: scale(0.98);
+.micro-excel-btn:active {
+transform: scale(0.97);
 }
 
 /* TABLE CONTAINER */
@@ -507,8 +507,8 @@ font-size:12px;
 
 }
 
-.action-bar {
-margin: 6px 2px;
+.action-container {
+margin: 4px 2px;
 }
 
 th{
@@ -567,8 +567,8 @@ Total Placed Students :
 
 <input type="text" id="search" placeholder="Search student / roll / company">
 
-<input type="number" id="minSalary" placeholder="Min Salary (>=)">
-<input type="number" id="maxSalary" placeholder="Max Salary (<=)">
+<input type="number" id="minSalary" step="any" placeholder="Min Salary (>=)">
+<input type="number" id="maxSalary" step="any" placeholder="Max Salary (<=)">
 
 <select id="batchFilter">
 <option value="">All Batches</option>
@@ -596,9 +596,8 @@ Total Placed Students :
 
 </div>
 
-<!-- Action Bar containing the Micro Excel Download button -->
-<div class="action-bar">
-<button id="downloadExcel" class="micro-btn">📥 Excel</button>
+<div class="action-container">
+<button id="exportExcelBtn" class="micro-excel-btn">📥 Excel</button>
 </div>
 
 <div class="table-container">
@@ -622,11 +621,11 @@ Total Placed Students :
 const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSlQ0WjFcZaI2eiKVtAqynVqs3H82MznXaV15n-qLjsDv6QL75g_7sQAhm0n6ZtiiDVKIB0MkuTNQ64/pub?gid=492329818&single=true&output=csv";
 
 let allData=[];
-let currentFilteredData=[]; // Track currently active filtered dataset
+let currentFilteredData=[]; // State monitoring layout tracker
 
 let natureKey="";
 let internKey="";
-let salaryKey="";
+let salaryKey=""; // Pointer mapping layout index placeholder
 
 /* LOAD CSV */
 
@@ -662,6 +661,7 @@ internKey = headers.find(
 h => h.toLowerCase().includes("paid")
 );
 
+// Map operational keys dynamically from metadata headers
 salaryKey = headers.find(
 h => h.toLowerCase().includes("salary") || h.toLowerCase().includes("lpa")
 );
@@ -944,8 +944,9 @@ function applyFilters(){
 let search=document.getElementById("search")
 .value.toLowerCase();
 
-let minSal = parseFloat(document.getElementById("minSalary").value);
-let maxSal = parseFloat(document.getElementById("maxSalary").value);
+// Numerical parsing parameters setup
+let minSalaryVal = parseFloat(document.getElementById("minSalary").value);
+let maxSalaryVal = parseFloat(document.getElementById("maxSalary").value);
 
 let batch=document.getElementById("batchFilter").value;
 
@@ -965,18 +966,19 @@ let filtered=allData.filter(row=>{
 
 let text=JSON.stringify(row).toLowerCase();
 
-let rowSal = NaN;
+// Safe numerical extractor loop tracking regex
+let currentSalaryNum = NaN;
 if(salaryKey && row[salaryKey]) {
-  rowSal = parseFloat(row[salaryKey].toString().replace(/[^0-9.]/g, ''));
+  currentSalaryNum = parseFloat(row[salaryKey].toString().replace(/[^0-9.]/g, ''));
 }
 
-let matchesMin = isNaN(minSal) || (!isNaN(rowSal) && rowSal >= minSal);
-let matchesMax = isNaN(maxSal) || (!isNaN(rowSal) && rowSal <= maxSal);
+let fulfillsMinBound = isNaN(minSalaryVal) || (!isNaN(currentSalaryNum) && currentSalaryNum >= minSalaryVal);
+let fulfillsMaxBound = isNaN(maxSalaryVal) || (!isNaN(currentSalaryNum) && currentSalaryNum <= maxSalaryVal);
 
 return text.includes(search)
 
-&& matchesMin
-&& matchesMax
+&& fulfillsMinBound
+&& fulfillsMaxBound
 
 && (batch==="" || row["Batch"]===batch)
 
@@ -995,7 +997,7 @@ return text.includes(search)
 
 });
 
-currentFilteredData = filtered; // Keep track of filtered rows globally
+currentFilteredData = filtered; // Synced update configuration context
 
 updateCompanyFilter(filtered);
   
@@ -1005,41 +1007,39 @@ updateStats(filtered);
 
 }
 
-/* EXCEL DOWNLOAD FUNCTION */
-function downloadExcelFile() {
+/* EXCEL DOWNLOADING EXECUTION MODULE */
+function handleExcelExport() {
   if (!currentFilteredData || currentFilteredData.length === 0) {
-    alert("No active records to export!");
+    alert("No active records available to download!");
     return;
   }
   
   let headers = Object.keys(currentFilteredData[0]);
-  let csvString = "﻿"; // Byte Order Mark for proper Excel UTF-8 representation
+  let outputCSV = "\uFEFF"; // Byte Order Mark prevents encoding breakage inside native Excel software
   
-  // Create Headers
-  csvString += headers.map(h => `"${h.replace(/"/g, '""')}"`).join(",") + "
-";
+  // Create parsed string line headers
+  outputCSV += headers.map(h => `"${h.replace(/"/g, '""')}"`).join(",") + "\r\n";
   
-  // Create Rows
+  // Transform data collection layers
   currentFilteredData.forEach(row => {
     let rowLine = headers.map(h => {
       let value = row[h] ? row[h].toString().trim() : "";
       return `"${value.replace(/"/g, '""')}"`;
     });
-    csvString += rowLine.join(",") + "
-";
+    outputCSV += rowLine.join(",") + "\r\n";
   });
   
-  // Create invisible anchor link to trigger browser download
-  let blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
-  let link = document.createElement("a");
-  let url = URL.createObjectURL(blob);
+  // Build background virtual DOM container instance to initiate download execution
+  let binaryBlob = new Blob([outputCSV], { type: "text/csv;charset=utf-8;" });
+  let virtualAnchor = document.createElement("a");
+  let objectURL = URL.createObjectURL(binaryBlob);
   
-  link.setAttribute("href", url);
-  link.setAttribute("download", "MGIT_Filtered_Placements.csv");
-  link.style.visibility = "hidden";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  virtualAnchor.setAttribute("href", objectURL);
+  virtualAnchor.setAttribute("download", "MGIT_Filtered_Placements.csv");
+  virtualAnchor.style.visibility = "hidden";
+  document.body.appendChild(virtualAnchor);
+  virtualAnchor.click();
+  document.body.removeChild(virtualAnchor);
 }
 
 /* EVENTS */
@@ -1047,6 +1047,7 @@ function downloadExcelFile() {
 document.getElementById("search")
 .addEventListener("keyup",applyFilters);
 
+// Attach operational listener bindings to salary range elements
 document.getElementById("minSalary")
 .addEventListener("input",applyFilters);
 
@@ -1071,13 +1072,11 @@ document.getElementById("internFilter")
 document.getElementById("genderFilter")
 .addEventListener("change",applyFilters);
 
-// Click handler for micro download button
-document.getElementById("downloadExcel")
-.addEventListener("click", downloadExcelFile);
+// Operational download bridge trigger initialization
+document.getElementById("exportExcelBtn")
+.addEventListener("click", handleExcelExport);
 
 </script>
 
 </body>
 </html>
-index.html
-Displaying index.html.
