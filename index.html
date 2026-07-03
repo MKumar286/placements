@@ -2,7 +2,7 @@
 <html>
 <head>
 
-<title>MGIT Placement Portal</title> 
+<title>MGIT Placement Portal</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -14,6 +14,12 @@ padding:0;
 box-sizing:border-box;
 }
 
+/* 3D Viewport Setup */
+html {
+height: 100%;
+perspective: 1200px;
+}
+
 body{
 font-family:Arial, sans-serif;
 padding:15px;
@@ -23,6 +29,7 @@ background:linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#1c1c3c);
 background-size:400% 400%;
 animation:bgMove 15s ease infinite;
 min-height:100vh;
+transform-style: preserve-3d;
 }
 
 /* Animated Background */
@@ -73,19 +80,32 @@ from{transform:translateX(0px);}
 to{transform:translateX(-80px);}
 }
 
+/* Global 3D Container Layer */
+.main-perspective-wrapper {
+transform: rotateX(4deg) rotateY(-2deg) translateZ(10px);
+transform-style: preserve-3d;
+transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+border-radius: 18px;
+}
+
+.main-perspective-wrapper:hover {
+transform: rotateX(2deg) rotateY(-1deg) translateZ(20px);
+}
+
 /* HEADER */
 
 .header-box{
 
 background:linear-gradient(135deg,#000814,#001d3d,#003566);
 
-padding:6px 10px;
+padding:15px 10px;
 
 border-radius:18px 18px 0 0;
 
 margin-bottom:0;
 
-box-shadow:0 6px 20px rgba(0,0,0,0.35);
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
 
 border:1px solid rgba(255,255,255,0.15);
 
@@ -93,18 +113,23 @@ border-bottom:none;
 
 text-align:center;
 
+transform: translateZ(30px); /* Extrudes header outward */
+
 }
 
 
-/* HEADINGS */
+/* HEADINGS WITH FLOATING GRADIENT COLORS */
 
 h1{
 
-font-size:34px;
+font-size:36px;
 
 font-weight:bold;
 
-background:linear-gradient(90deg,#ffffff,#ffe082,#ffffff);
+/* Infinite color shifting neon text setup */
+background: linear-gradient(90deg, #ff007f, #00f0ff, #ffb703, #ff007f);
+background-size: 300% auto;
+animation: floatColors 6s linear infinite;
 
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
@@ -112,7 +137,13 @@ background:linear-gradient(90deg,#ffffff,#ffe082,#ffffff);
 margin-bottom:8px;
 
 letter-spacing:1px;
+text-shadow: 0px 5px 15px rgba(0,240,255,0.2);
 
+}
+
+@keyframes floatColors {
+0% { background-position: 0% center; }
+100% { background-position: 300% center; }
 }
 
 h3{
@@ -146,13 +177,13 @@ gap:25px;
 
 flex-wrap:wrap;
 
-padding:8px 12px;
+padding:12px 12px;
 
 background: linear-gradient(135deg, #064420, #0b6b35);
 
 border-radius:0;
 
-box-shadow:none;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
 
 border-left:1px solid rgba(255,255,255,0.15);
 
@@ -160,13 +191,15 @@ border-right:1px solid rgba(255,255,255,0.15);
 
 color:white;
 
+transform: translateZ(20px);
+
 }
 
 /* FILTER SECTION */
 
 .controls{
 
-margin-bottom:6px;
+margin-bottom:0;
 
 display:flex;
 
@@ -176,13 +209,13 @@ gap:6px;
 
 background:rgba(255,255,255,0.12);
 
-padding:6px 8px;
+padding:10px 8px;
 
 border-radius:0 0 14px 14px;
 
 backdrop-filter:blur(10px);
 
-box-shadow:0 6px 20px rgba(0,0,0,0.25);
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
 
 border:1px solid rgba(255,255,255,0.15);
 
@@ -193,6 +226,8 @@ overflow-x:auto;
 overflow-y:hidden;
 
 scroll-behavior:smooth;
+
+transform: translateZ(25px);
 
 }
 /* FILTERS */
@@ -205,7 +240,7 @@ flex:0 0 auto;
 width:170px;
 min-width:170px;
 
-height:30px;
+height:32px;
 
 padding:4px 8px;
 
@@ -234,7 +269,7 @@ color: #555;
 
 transform:scale(1.02);
 
-box-shadow:0 0 10px rgba(255,255,255,0.5);
+box-shadow:0 0 10px rgba(0,240,255,0.6);
 
 border:1px solid #00c6ff;
 
@@ -256,37 +291,34 @@ background:linear-gradient(90deg,#00c6ff,#0072ff);
 border-radius:10px;
 }
 
-/* EXCEL ACTION LAYER */
+/* EXCEL BAR Container */
 .action-container {
 display: flex;
 justify-content: flex-end;
-margin: 6px 4px;
+margin: 12px 4px;
+transform: translateZ(15px);
 }
 
 .micro-excel-btn {
 background: linear-gradient(135deg, #1d743a, #107c41);
 color: white;
 border: 1px solid rgba(255,255,255,0.2);
-padding: 4px 10px;
+padding: 5px 14px;
 border-radius: 5px;
 font-size: 11px;
 font-weight: bold;
 cursor: pointer;
 transition: 0.2s ease;
-box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 display: flex;
 align-items: center;
 gap: 4px;
 }
 
 .micro-excel-btn:hover {
-transform: scale(1.03);
+transform: scale(1.05) translateZ(5px);
 background: linear-gradient(135deg, #107c41, #0b592e);
-box-shadow: 0 4px 10px rgba(0,180,90,0.4);
-}
-
-.micro-excel-btn:active {
-transform: scale(0.97);
+box-shadow: 0 6px 15px rgba(0,180,90,0.5);
 }
 
 /* TABLE CONTAINER */
@@ -301,13 +333,15 @@ overflow-y:hidden;
 
 border-radius:18px;
 
-box-shadow:0 8px 25px rgba(0,0,0,0.35);
+box-shadow:0 15px 40px rgba(0,0,0,0.4);
 
 scroll-behavior:smooth;
 
 background:rgba(255,255,255,0.05);
 
 padding-bottom:6px;
+
+transform: translateZ(10px);
 
 }
 
@@ -365,7 +399,7 @@ overflow:hidden;
 
 th{
 
-padding:8px 9px;
+padding:10px 9px;
 
 font-size:13px;
 
@@ -387,7 +421,7 @@ white-space:nowrap;
 
 td{
 
-padding:5px 9px;
+padding:6px 9px;
 
 font-size:12px;
 
@@ -461,76 +495,75 @@ background:linear-gradient(135deg,#43cea2,#185a9d);
 
 }
 
-/* MOBILE */
+/* MOBILE RESPONSIVENESS OVERRIDES */
 
 @media(max-width:768px){
+
+html {
+perspective: none; /* Disables high tilt shifts on small viewports */
+}
+
+.main-perspective-wrapper {
+transform: none !important;
+box-shadow: none;
+}
 
 body{
 padding:10px;
 }
 
 h1{
-font-size:22px;
+font-size:24px;
+background-size: 200% auto;
 }
 
 h3{
-font-size:15px;
+font-size:14px;
 }
 
 .stats{
-
 font-size:13px;
-
 gap:12px;
-
-padding:6px;
-
+padding:8px;
+transform: none;
 }
 
 .controls{
-
-padding:5px;
-
+padding:6px;
 gap:5px;
-
+transform: none;
 }
 
 .controls input,
 .controls select{
-
 width:145px;
 min-width:145px;
-
 height:28px;
-padding:3px 6px;
-font-size:12px;
-
+font-size:11px;
 }
 
 .action-container {
-margin: 4px 2px;
+margin: 8px 2px;
+transform: none;
+}
+
+.table-container {
+transform: none;
+box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 th{
-
 font-size:11px;
-
-padding:5px 6px;
-
+padding:6px;
 }
 
 td{
-
 font-size:11px;
-
-padding:4px 6px;
-
+padding:5px;
 }
 
 table{
-
 min-width:1400px;
-
 }
 
 }
@@ -541,75 +574,42 @@ min-width:1400px;
 
 <body>
 
-<div class="header-box">
+<div class="main-perspective-wrapper">
 
-<h1>MGIT Placement Records</h1>
+    <div class="header-box">
+        <h1>MGIT Placement Records</h1>
+        <h3>Academic Year 2025 - 2026</h3>
+    </div>
 
-<h3>Academic Year 2025 - 2026</h3>
+    <div class="stats">
+        <div>Total Offers : <span id="totalOffers">0</span></div>
+        <div>Total Placed Students : <span id="placedStudents">0</span></div>
+    </div>
 
-</div>
-
-<div class="stats">
-
-<div>
-Total Offers :
-<span id="totalOffers">0</span>
-</div>
-
-<div>
-Total Placed Students :
-<span id="placedStudents">0</span>
-</div>
-
-</div>
-
-<div class="controls">
-
-<input type="text" id="search" placeholder="Search student / roll / company">
-
-<input type="number" id="minSalary" step="any" placeholder="Min Salary (>=)">
-<input type="number" id="maxSalary" step="any" placeholder="Max Salary (<=)">
-
-<select id="batchFilter">
-<option value="">All Batches</option>
-</select>
-
-<select id="branchFilter">
-<option value="">All Branches</option>
-</select>
-
-<select id="companyFilter">
-<option value="">All Companies</option>
-</select>
-
-<select id="natureFilter">
-<option value="">Nature of the Company</option>
-</select>
-
-<select id="internFilter">
-<option value="">Internship Type</option>
-</select>
-
-<select id="genderFilter">
-<option value="">All Genders</option>
-</select>
+    <div class="controls">
+        <input type="text" id="search" placeholder="Search student / roll / company">
+        <input type="number" id="minSalary" step="any" placeholder="Min Salary (>=)">
+        <input type="number" id="maxSalary" step="any" placeholder="Max Salary (<=)">
+        
+        <select id="batchFilter"><option value="">All Batches</option></select>
+        <select id="branchFilter"><option value="">All Branches</option></select>
+        <select id="companyFilter"><option value="">All Companies</option></select>
+        <select id="natureFilter"><option value="">Nature of the Company</option></select>
+        <select id="internFilter"><option value="">Internship Type</option></select>
+        <select id="genderFilter"><option value="">All Genders</option></select>
+    </div>
 
 </div>
 
 <div class="action-container">
-<button id="exportExcelBtn" class="micro-excel-btn">📥 Excel</button>
+    <button id="exportExcelBtn" class="micro-excel-btn">📥 Excel</button>
 </div>
 
 <div class="table-container">
-
-<table id="placementTable">
-
-<thead></thead>
-
-<tbody></tbody>
-
-</table>
-
+    <table id="placementTable">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
@@ -627,7 +627,7 @@ let natureKey="";
 let internKey="";
 let salaryKey=""; 
 
-/* LOAD CSV */
+/* LOAD CSV DATA */
 
 Papa.parse(csvURL,{
 
@@ -639,49 +639,37 @@ skipEmptyLines:true,
 
 complete:function(results){
 
-allData = results.data.filter(
-row => Object.values(row).join("").trim() !== ""
-);
+// Sanitize inputs to isolate row structural data lines
+allData = results.data.filter(row => {
+  let combinedRowText = Object.values(row).join("").trim();
+  let lowercaseText = combinedRowText.toLowerCase();
+  return combinedRowText !== "" && 
+         !lowercaseText.includes("displaying index.html") &&
+         !lowercaseText.includes("index.html");
+});
 
 if(allData.length===0){
-
-alert("No Data Found");
-
+alert("No Data Found or Row Structure Invalid");
 return;
-
 }
 
 let headers = Object.keys(allData[0]);
 
-natureKey = headers.find(
-h => h.toLowerCase().includes("nature")
-);
-
-internKey = headers.find(
-h => h.toLowerCase().includes("paid")
-);
-
-// Autodetects if your column header contains words like "salary", "lpa", or "package"
-salaryKey = headers.find(
-h => h.toLowerCase().includes("salary") || h.toLowerCase().includes("lpa") || h.toLowerCase().includes("package")
-);
+natureKey = headers.find(h => h.toLowerCase().includes("nature"));
+internKey = headers.find(h => h.toLowerCase().includes("paid"));
+salaryKey = headers.find(h => h.toLowerCase().includes("salary") || h.toLowerCase().includes("lpa") || h.toLowerCase().includes("package"));
 
 currentFilteredData = [...allData];
 
 buildTable(allData);
-
 populateFilters(allData);
-
 updateStats(allData);
 
 },
 
 error:function(err){
-
 console.log(err);
-
 alert("CSV Loading Failed");
-
 }
 
 });
@@ -691,326 +679,168 @@ alert("CSV Loading Failed");
 function buildTable(data){
 
 let thead=document.querySelector("#placementTable thead");
-
 let tbody=document.querySelector("#placementTable tbody");
 
 thead.innerHTML="";
-
 tbody.innerHTML="";
 
 if(data.length===0){
-
-tbody.innerHTML=
-"<tr><td colspan='20'>No Records Found</td></tr>";
-
+tbody.innerHTML="<tr><td colspan='20'>No Records Found</td></tr>";
 return;
-
 }
 
 let headers=Object.keys(data[0]);
-
 let tr=document.createElement("tr");
 
 /* HEADERS */
-
 headers.forEach(h=>{
-
 let th=document.createElement("th");
-
 th.innerText=h;
-
 tr.appendChild(th);
-
 });
-
 thead.appendChild(tr);
 
 /* ROWS */
-
 data.forEach(row=>{
-
 let tr=document.createElement("tr");
-
 headers.forEach(h=>{
-
 let td=document.createElement("td");
-
 let value = row[h] ? row[h].toString().trim() : "";
 
 if(value.includes("http")){
-
 let a=document.createElement("a");
-
 a.href=value;
-
 a.target="_blank";
-
 a.className="link-btn";
 
 if(h.toLowerCase().includes("intern")){
-
 a.innerText="📄 Internship Letter";
-
 }
-
 else if(h.toLowerCase().includes("offer")){
-
 a.innerText="📄 Offer Letter";
-
 }
-
 else{
-
 a.innerText="📄 View";
-
 }
-
 td.appendChild(a);
-
 }
-
 else{
-
 td.innerText=value;
-
 }
-
 tr.appendChild(td);
-
 });
-
 tbody.appendChild(tr);
-
 });
 
 }
 
-/* POPULATE FILTERS */
+/* POPULATE FILTER DROPDOWNS */
 
 function populateFilters(data){
 
-let batches=[
-...new Set(data.map(d=>d["Batch"]).filter(Boolean))
-];
-
-let branches=[
-...new Set(data.map(d=>d["Branch"]).filter(Boolean))
-];
-
-let companies=[
-...new Set(data.map(d=>d["Company Placed"]).filter(Boolean))
-];
-
-let natures=[
-...new Set(
-data.map(d => (d[natureKey] || "").trim())
-.filter(v=>v)
-)
-];
-
-let interns=[
-...new Set(
-data.map(d => (d[internKey] || "").trim())
-.filter(v=>v)
-)
-];
-
-let genders=[
-...new Set(
-data.map(d => (d["Gender"] || "").trim())
-.filter(v=>v)
-)
-];
-
-/* SELECTS */
+let batches=[...new Set(data.map(d=>d["Batch"]).filter(Boolean))];
+let branches=[...new Set(data.map(d=>d["Branch"]).filter(Boolean))];
+let companies=[...new Set(data.map(d=>d["Company Placed"]).filter(Boolean))];
+let natures=[...new Set(data.map(d => (d[natureKey] || "").trim()).filter(v=>v))];
+let interns=[...new Set(data.map(d => (d[internKey] || "").trim()).filter(v=>v))];
+let genders=[...new Set(data.map(d => (d["Gender"] || "").trim()).filter(v=>v))];
 
 let batchSelect=document.getElementById("batchFilter");
-
 let branchSelect=document.getElementById("branchFilter");
-
 let companySelect=document.getElementById("companyFilter");
-
 let natureSelect=document.getElementById("natureFilter");
-
 let internSelect=document.getElementById("internFilter");
-
 let genderSelect=document.getElementById("genderFilter");
 
-/* RESET */
-
 batchSelect.innerHTML='<option value="">All Batches</option>';
-
 branchSelect.innerHTML='<option value="">All Branches</option>';
-
 companySelect.innerHTML='<option value="">All Companies</option>';
-
 natureSelect.innerHTML='<option value="">Nature of the Company</option>';
-
 internSelect.innerHTML='<option value="">Internship Type</option>';
-
 genderSelect.innerHTML='<option value="">All Genders</option>';
 
-/* ADD OPTIONS */
-
-batches.sort().forEach(v=>
-batchSelect.add(new Option(v,v))
-);
-
-branches.sort().forEach(v=>
-branchSelect.add(new Option(v,v))
-);
-
-companies.sort().forEach(v=>
-companySelect.add(new Option(v,v))
-);
-
-natures.sort().forEach(v=>
-natureSelect.add(new Option(v,v))
-);
-
-interns.sort().forEach(v=>
-internSelect.add(new Option(v,v))
-);
-
-genders.sort().forEach(v=>
-genderSelect.add(new Option(v,v))
-);
+batches.sort().forEach(v=> batchSelect.add(new Option(v,v)));
+branches.sort().forEach(v=> branchSelect.add(new Option(v,v)));
+companies.sort().forEach(v=> companySelect.add(new Option(v,v)));
+natures.sort().forEach(v=> natureSelect.add(new Option(v,v)));
+interns.sort().forEach(v=> internSelect.add(new Option(v,v)));
+genders.sort().forEach(v=> genderSelect.add(new Option(v,v)));
 
 }
 
 function updateCompanyFilter(filteredData){
-
-let companySelect =
-document.getElementById("companyFilter");
-
-/* CURRENT SELECTION */
-
+let companySelect = document.getElementById("companyFilter");
 let currentValue = companySelect.value;
+let companies = [...new Set(filteredData.map(d => d["Company Placed"]).filter(Boolean))];
 
-/* UNIQUE COMPANIES */
-
-let companies = [
-...new Set(
-filteredData
-.map(d => d["Company Placed"])
-.filter(Boolean)
-)
-];
-
-/* RESET */
-
-companySelect.innerHTML =
-'<option value="">All Companies</option>';
-
-/* ADD FILTERED OPTIONS */
-
-companies.sort().forEach(v =>
-companySelect.add(new Option(v,v))
-);
-
-/* RESTORE VALUE IF EXISTS */
+companySelect.innerHTML = '<option value="">All Companies</option>';
+companies.sort().forEach(v => companySelect.add(new Option(v,v)));
 
 if(companies.includes(currentValue)){
-
 companySelect.value = currentValue;
-
+}
 }
 
-}
-
-/* UPDATE STATS */
+/* UPDATE STATISTICS */
 
 function updateStats(data){
-
 document.getElementById("totalOffers").innerText=data.length;
-
 let uniqueStudents=new Set();
-
 data.forEach(row=>{
-
-uniqueStudents.add(row["Roll Number"]);
-
+if(row["Roll Number"]) { uniqueStudents.add(row["Roll Number"]); }
 });
-
-document.getElementById("placedStudents").innerText=
-uniqueStudents.size;
-
+document.getElementById("placedStudents").innerText=uniqueStudents.size;
 }
 
-/* APPLY FILTERS */
+/* APPLY COMPILATION FILTER ENGINE */
 
 function applyFilters(){
 
-let search=document.getElementById("search")
-.value.toLowerCase();
-
+let search=document.getElementById("search").value.toLowerCase();
 let minSalaryVal = parseFloat(document.getElementById("minSalary").value);
 let maxSalaryVal = parseFloat(document.getElementById("maxSalary").value);
 
 let batch=document.getElementById("batchFilter").value;
-
 let branch=document.getElementById("branchFilter").value;
-
 let company=document.getElementById("companyFilter").value;
-
 let nature=document.getElementById("natureFilter").value;
-
 let intern=document.getElementById("internFilter").value;
-
 let gender=document.getElementById("genderFilter").value;
-
-/* FILTER */
 
 let filtered=allData.filter(row=>{
 
 let text=JSON.stringify(row).toLowerCase();
-
-// Bulletproof numeric parser engine
 let currentSalaryNum = NaN;
+
 if(salaryKey && row[salaryKey]) {
-  // Cleans strings like "6.5 LPA" or "12,00,000" into pure numbers
   let cleanedStr = row[salaryKey].toString().replace(/[^0-9.]/g, '');
-  if(cleanedStr.trim() !== "") {
-    currentSalaryNum = parseFloat(cleanedStr);
-  }
+  if(cleanedStr.trim() !== "") { currentSalaryNum = parseFloat(cleanedStr); }
 }
 
 let fulfillsMinBound = isNaN(minSalaryVal) || (!isNaN(currentSalaryNum) && currentSalaryNum >= minSalaryVal);
 let fulfillsMaxBound = isNaN(maxSalaryVal) || (!isNaN(currentSalaryNum) && currentSalaryNum <= maxSalaryVal);
 
 return text.includes(search)
-
 && fulfillsMinBound
 && fulfillsMaxBound
-
 && (batch==="" || row["Batch"]===batch)
-
 && (branch==="" || row["Branch"]===branch)
-
 && (company==="" || row["Company Placed"]===company)
-
-&& (nature==="" ||
-(row[natureKey] || "").trim()===nature)
-
-&& (intern==="" ||
-(row[internKey] || "").trim()===intern)
-
-&& (gender==="" ||
-(row["Gender"] || "").trim()===gender);
+&& (nature==="" || (row[natureKey] || "").trim()===nature)
+&& (intern==="" || (row[internKey] || "").trim()===intern)
+&& (gender==="" || (row["Gender"] || "").trim()===gender);
 
 });
 
 currentFilteredData = filtered;
 
 updateCompanyFilter(filtered);
-  
 buildTable(filtered);
-
 updateStats(filtered);
 
 }
 
-/* EXCEL DOWNLOAD CONTROLLER */
+/* EXCEL SHEET EXPORT LOGIC */
 function handleExcelExport() {
   if (!currentFilteredData || currentFilteredData.length === 0) {
     alert("No active records available to download!");
@@ -1019,7 +849,6 @@ function handleExcelExport() {
   
   let headers = Object.keys(currentFilteredData[0]);
   let outputCSV = "\uFEFF"; 
-  
   outputCSV += headers.map(h => `"${h.replace(/"/g, '""')}"`).join(",") + "\r\n";
   
   currentFilteredData.forEach(row => {
@@ -1042,37 +871,18 @@ function handleExcelExport() {
   document.body.removeChild(virtualAnchor);
 }
 
-/* EVENTS */
+/* EVENT LISTENERS */
 
-document.getElementById("search")
-.addEventListener("keyup",applyFilters);
-
-document.getElementById("minSalary")
-.addEventListener("input",applyFilters);
-
-document.getElementById("maxSalary")
-.addEventListener("input",applyFilters);
-
-document.getElementById("batchFilter")
-.addEventListener("change",applyFilters);
-
-document.getElementById("branchFilter")
-.addEventListener("change",applyFilters);
-
-document.getElementById("companyFilter")
-.addEventListener("change",applyFilters);
-
-document.getElementById("natureFilter")
-.addEventListener("change",applyFilters);
-
-document.getElementById("internFilter")
-.addEventListener("change",applyFilters);
-
-document.getElementById("genderFilter")
-.addEventListener("change",applyFilters);
-
-document.getElementById("exportExcelBtn")
-.addEventListener("click", handleExcelExport);
+document.getElementById("search").addEventListener("keyup",applyFilters);
+document.getElementById("minSalary").addEventListener("input",applyFilters);
+document.getElementById("maxSalary").addEventListener("input",applyFilters);
+document.getElementById("batchFilter").addEventListener("change",applyFilters);
+document.getElementById("branchFilter").addEventListener("change",applyFilters);
+document.getElementById("companyFilter").addEventListener("change",applyFilters);
+document.getElementById("natureFilter").addEventListener("change",applyFilters);
+document.getElementById("internFilter").addEventListener("change",applyFilters);
+document.getElementById("genderFilter").addEventListener("change",applyFilters);
+document.getElementById("exportExcelBtn").addEventListener("click", handleExcelExport);
 
 </script>
 
