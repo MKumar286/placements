@@ -12,6 +12,7 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
+font-weight: 700; /* Makes all body text thick and readable */
 }
 
 /* 3D Viewport Setup */
@@ -21,33 +22,32 @@ perspective: 1200px;
 }
 
 body{
-font-family:Arial, sans-serif;
+font-family: Arial, sans-serif;
 padding:15px;
 overflow-x:hidden;
 color:white;
-background:linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#1c1c3c);
+/* Super colorful vibrant animated background mesh */
+background: linear-gradient(-45deg, #1a0033, #001133, #003311, #440022, #002244);
 background-size:400% 400%;
-animation:bgMove 15s ease infinite;
+animation:bgMove 12s ease infinite;
 min-height:100vh;
 transform-style: preserve-3d;
 }
 
 /* Animated Background */
-
 @keyframes bgMove{
 0%{background-position:0% 50%;}
 50%{background-position:100% 50%;}
 100%{background-position:0% 50%;}
 }
 
-/* Floating Glow */
-
+/* Floating High-Contrast Colorful Glow Overlays */
 body::before{
 content:"";
 position:fixed;
 width:500px;
 height:500px;
-background:rgba(0,198,255,0.15);
+background:rgba(0, 255, 128, 0.25);
 border-radius:50%;
 top:-120px;
 left:-120px;
@@ -61,7 +61,7 @@ content:"";
 position:fixed;
 width:400px;
 height:400px;
-background:rgba(255,0,150,0.15);
+background:rgba(255, 0, 128, 0.25);
 border-radius:50%;
 bottom:-100px;
 right:-100px;
@@ -85,7 +85,7 @@ to{transform:translateX(-80px);}
 transform: rotateX(4deg) rotateY(-2deg) translateZ(10px);
 transform-style: preserve-3d;
 transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+box-shadow: 0 30px 60px rgba(0,0,0,0.5);
 border-radius: 18px;
 }
 
@@ -94,51 +94,30 @@ transform: rotateX(2deg) rotateY(-1deg) translateZ(20px);
 }
 
 /* HEADER */
-
 .header-box{
-
 background:linear-gradient(135deg,#000814,#001d3d,#003566);
-
 padding:15px 10px;
-
 border-radius:18px 18px 0 0;
-
 margin-bottom:0;
-
 box-shadow:0 10px 30px rgba(0,0,0,0.4);
-
-border:1px solid rgba(255,255,255,0.15);
-
+border:2px solid rgba(255,255,255,0.2);
 border-bottom:none;
-
 text-align:center;
-
-transform: translateZ(30px); /* Extrudes header outward */
-
+transform: translateZ(30px);
 }
 
-
 /* HEADINGS WITH FLOATING GRADIENT COLORS */
-
 h1{
-
 font-size:36px;
-
-font-weight:bold;
-
-/* Infinite color shifting neon text setup */
-background: linear-gradient(90deg, #ff007f, #00f0ff, #ffb703, #ff007f);
+font-weight: 900; /* Maximum thickness */
+background: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
 background-size: 300% auto;
 animation: floatColors 6s linear infinite;
-
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-
 margin-bottom:8px;
-
 letter-spacing:1px;
-text-shadow: 0px 5px 15px rgba(0,240,255,0.2);
-
+text-shadow: 0px 5px 15px rgba(0,240,255,0.3);
 }
 
 @keyframes floatColors {
@@ -147,166 +126,146 @@ text-shadow: 0px 5px 15px rgba(0,240,255,0.2);
 }
 
 h3{
-
 font-size:18px;
 margin-top:2px;
-font-weight:500;
-
+font-weight: 800;
 background:linear-gradient(90deg,#b2ff59,#00e5ff);
-
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-
 }
 
 /* STATS */
-
 .stats{
-
 margin:0;
-
-font-weight:bold;
-
+font-weight: 900;
 font-size:18px;
-
 display:flex;
-
 justify-content:center;
-
 gap:25px;
-
 flex-wrap:wrap;
-
 padding:12px 12px;
-
-background: linear-gradient(135deg, #064420, #0b6b35);
-
+background: linear-gradient(135deg, #0e853f, #064420);
 border-radius:0;
-
 box-shadow:0 5px 15px rgba(0,0,0,0.2);
-
-border-left:1px solid rgba(255,255,255,0.15);
-
-border-right:1px solid rgba(255,255,255,0.15);
-
+border-left:2px solid rgba(255,255,255,0.2);
+border-right:2px solid rgba(255,255,255,0.2);
 color:white;
-
 transform: translateZ(20px);
-
 }
 
 /* FILTER SECTION */
-
 .controls{
-
 margin-bottom:0;
-
 display:flex;
-
 flex-wrap:nowrap;
-
 gap:6px;
-
-background:rgba(255,255,255,0.12);
-
+background:rgba(255,255,255,0.15);
 padding:10px 8px;
-
 border-radius:0 0 14px 14px;
-
 backdrop-filter:blur(10px);
-
 box-shadow:0 10px 30px rgba(0,0,0,0.3);
-
-border:1px solid rgba(255,255,255,0.15);
-
+border:2px solid rgba(255,255,255,0.2);
 border-top:none;
-
 overflow-x:auto;
-
 overflow-y:hidden;
-
 scroll-behavior:smooth;
-
 transform: translateZ(25px);
-
 }
+
 /* FILTERS */
-
 .controls input,
-.controls select{
-
+.controls select,
+.salary-row-inputs input{
 flex:0 0 auto;
-
 width:170px;
 min-width:170px;
-
-height:32px;
-
+height:34px;
 padding:4px 8px;
-
-font-size:12px;
-
+font-size:13px;
+font-weight: 800;
 border-radius:8px;
-
-border:1px solid rgba(255,255,255,0.2);
-
+border:2px solid rgba(255,255,255,0.3);
 outline:none;
-
-background:rgba(255,255,255,0.92);
-
+background:rgba(255,255,255,0.95);
+color: #000;
 transition:0.3s;
-
 }
 
-.controls input::placeholder {
-color: #555;
+.controls input::placeholder,
+.salary-row-inputs input::placeholder {
+color: #444;
+font-weight: 800;
 }
 
 /* FOCUS */
-
 .controls input:focus,
-.controls select:focus{
-
+.controls select:focus,
+.salary-row-inputs input:focus{
 transform:scale(1.02);
-
-box-shadow:0 0 10px rgba(0,240,255,0.6);
-
-border:1px solid #00c6ff;
-
+box-shadow:0 0 12px rgba(0,255,255,0.8);
+border:2px solid #00f0ff;
 }
 
 /* FILTER SCROLLBAR */
-
 .controls::-webkit-scrollbar{
 height:7px;
 }
-
 .controls::-webkit-scrollbar-track{
 background:rgba(255,255,255,0.08);
 border-radius:10px;
 }
-
 .controls::-webkit-scrollbar-thumb{
 background:linear-gradient(90deg,#00c6ff,#0072ff);
 border-radius:10px;
 }
 
-/* EXCEL BAR Container */
-.action-container {
+/* SECOND ROW ACTION AND SALARY FILTER CONTAINER */
+.action-salary-container {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin: 15px 4px;
+transform: translateZ(15px);
+gap: 10px;
+}
+
+/* Middle aligned container for the numeric ranges */
+.salary-row-inputs {
+display: flex;
+gap: 8px;
+justify-content: center;
+flex-grow: 1;
+}
+
+.salary-row-inputs input {
+width: 160px;
+min-width: 160px;
+border: 2px solid rgba(0, 240, 255, 0.4);
+background: #ffffff;
+}
+
+/* Keeps spreadsheet button cleanly positioned on the right */
+.export-wrapper {
+flex-shrink: 0;
+width: 100px;
 display: flex;
 justify-content: flex-end;
-margin: 12px 4px;
-transform: translateZ(15px);
+}
+
+/* Invisible placeholder balancing spacer on left for perfect page centering */
+.left-spacer {
+width: 100px;
+flex-shrink: 0;
 }
 
 .micro-excel-btn {
 background: linear-gradient(135deg, #1d743a, #107c41);
 color: white;
-border: 1px solid rgba(255,255,255,0.2);
-padding: 5px 14px;
-border-radius: 5px;
-font-size: 11px;
-font-weight: bold;
+border: 2px solid rgba(255,255,255,0.3);
+padding: 6px 14px;
+border-radius: 6px;
+font-size: 12px;
+font-weight: 900;
 cursor: pointer;
 transition: 0.2s ease;
 box-shadow: 0 4px 12px rgba(0,0,0,0.4);
@@ -318,254 +277,184 @@ gap: 4px;
 .micro-excel-btn:hover {
 transform: scale(1.05) translateZ(5px);
 background: linear-gradient(135deg, #107c41, #0b592e);
-box-shadow: 0 6px 15px rgba(0,180,90,0.5);
+box-shadow: 0 6px 15px rgba(0,180,90,0.6);
 }
 
 /* TABLE CONTAINER */
-
 .table-container{
-
 width:100%;
-
 overflow-x:auto;
-
 overflow-y:hidden;
-
 border-radius:18px;
-
-box-shadow:0 15px 40px rgba(0,0,0,0.4);
-
+box-shadow:0 15px 40px rgba(0,0,0,0.5);
 scroll-behavior:smooth;
-
 background:rgba(255,255,255,0.05);
-
 padding-bottom:6px;
-
 transform: translateZ(10px);
-
+border: 2px solid rgba(255,255,255,0.1);
 }
 
 /* TABLE SCROLLBAR */
-
 .table-container::-webkit-scrollbar{
-
 height:10px;
-
 }
-
 .table-container::-webkit-scrollbar-track{
-
 background:rgba(255,255,255,0.08);
-
 border-radius:10px;
-
 }
-
 .table-container::-webkit-scrollbar-thumb{
-
 background:linear-gradient(90deg,#ff512f,#dd2476);
-
 border-radius:10px;
-
 }
-
 .table-container::-webkit-scrollbar-thumb:hover{
-
 background:linear-gradient(90deg,#00c6ff,#0072ff);
-
 }
 
 /* TABLE */
-
 table{
-
 border-collapse:collapse;
-
 min-width:1600px;
-
 width:max-content;
-
 background:#ffffff;
-
-color:#222;
-
+color:#000;
 border-radius:18px;
-
 overflow:hidden;
-
 }
 
 /* TABLE HEADER */
-
 th{
-
-padding:10px 9px;
-
+padding:12px 10px;
 font-size:13px;
-
-font-weight:bold;
-
+font-weight: 900; /* Extra bold headers */
 text-align:center;
-
 background:linear-gradient(135deg,#141e30,#243b55);
-
 color:#ffffff;
 line-height:1.3;
-border:1px solid rgba(255,255,255,0.12);
-
+border:1px solid rgba(255,255,255,0.2);
 white-space:nowrap;
-
 }
 
 /* TABLE DATA */
-
 td{
-
-padding:6px 9px;
-
+padding:8px 10px;
 font-size:12px;
-
-font-weight:500;
-
+font-weight: 800; /* Bold readable rows */
 text-align:center;
-
 white-space:nowrap;
-
-border:1px solid rgba(16,37,66,0.12);
-
+border:1px solid rgba(16,37,66,0.15);
 }
 
 /* ROW COLORS */
-
 tr:nth-child(even){
-
 background:#eef5ff;
-
 }
-
 tr:nth-child(odd){
-
 background:#ffffff;
-
 }
 
 /* HOVER */
-
 tbody tr:hover{
-
 background:#ffd180;
-
 transition:0.3s;
-
 }
 
 /* BUTTON */
-
 .link-btn{
-
 background:linear-gradient(135deg,#667eea,#764ba2);
-
 color:white;
-
-padding:3px 8px;
-
+padding:4px 10px;
 border-radius:6px;
-
 text-decoration:none;
-
-font-size:10px;
-
-font-weight:bold;
-  
+font-size:11px;
+font-weight: 900;
 line-height:1.2;
-
 display:inline-block;
-
 transition:0.3s;
-
-box-shadow:0 3px 10px rgba(0,0,0,0.2);
-
+box-shadow:0 3px 10px rgba(0,0,0,0.3);
 }
 
 .link-btn:hover{
-
 transform:scale(1.06);
-
 background:linear-gradient(135deg,#43cea2,#185a9d);
-
 }
 
 /* MOBILE RESPONSIVENESS OVERRIDES */
-
 @media(max-width:768px){
-
 html {
-perspective: none; /* Disables high tilt shifts on small viewports */
+perspective: none;
 }
-
 .main-perspective-wrapper {
 transform: none !important;
 box-shadow: none;
 }
-
 body{
 padding:10px;
 }
-
 h1{
 font-size:24px;
 background-size: 200% auto;
 }
-
 h3{
 font-size:14px;
 }
-
 .stats{
 font-size:13px;
 gap:12px;
 padding:8px;
 transform: none;
 }
-
 .controls{
 padding:6px;
 gap:5px;
 transform: none;
 }
-
 .controls input,
 .controls select{
 width:145px;
 min-width:145px;
-height:28px;
+height:30px;
 font-size:11px;
 }
-
-.action-container {
-margin: 8px 2px;
+.action-salary-container {
+flex-direction: column;
+margin: 10px 2px;
+gap: 12px;
 transform: none;
 }
-
+.left-spacer {
+display: none;
+}
+.salary-row-inputs {
+width: 100%;
+justify-content: space-between;
+}
+.salary-row-inputs input {
+width: 48%;
+min-width: 0;
+}
+.export-wrapper {
+width: 100%;
+justify-content: center;
+}
+.micro-excel-btn {
+width: 100%;
+justify-content: center;
+}
 .table-container {
 transform: none;
 box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
-
 th{
+font-size:11px;
+padding:8px 6px;
+}
+td{
 font-size:11px;
 padding:6px;
 }
-
-td{
-font-size:11px;
-padding:5px;
-}
-
 table{
 min-width:1400px;
 }
-
 }
 
 </style>
@@ -588,8 +477,6 @@ min-width:1400px;
 
     <div class="controls">
         <input type="text" id="search" placeholder="Search student / roll / company">
-        <input type="number" id="minSalary" step="any" placeholder="Min Salary (>=)">
-        <input type="number" id="maxSalary" step="any" placeholder="Max Salary (<=)">
         
         <select id="batchFilter"><option value="">All Batches</option></select>
         <select id="branchFilter"><option value="">All Branches</option></select>
@@ -601,8 +488,15 @@ min-width:1400px;
 
 </div>
 
-<div class="action-container">
-    <button id="exportExcelBtn" class="micro-excel-btn">📥 Excel</button>
+<div class="action-salary-container">
+    <div class="left-spacer"></div> <div class="salary-row-inputs">
+        <input type="number" id="minSalary" step="any" placeholder="Min Salary (>=)">
+        <input type="number" id="maxSalary" step="any" placeholder="Max Salary (<=)">
+    </div>
+    
+    <div class="export-wrapper">
+        <button id="exportExcelBtn" class="micro-excel-btn">📥 Excel</button>
+    </div>
 </div>
 
 <div class="table-container">
@@ -617,7 +511,6 @@ min-width:1400px;
 <script>
 
 /* CSV URL */
-
 const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSlQ0WjFcZaI2eiKVtAqynVqs3H82MznXaV15n-qLjsDv6QL75g_7sQAhm0n6ZtiiDVKIB0MkuTNQ64/pub?gid=492329818&single=true&output=csv";
 
 let allData=[];
@@ -628,15 +521,10 @@ let internKey="";
 let salaryKey=""; 
 
 /* LOAD CSV DATA */
-
 Papa.parse(csvURL,{
-
 download:true,
-
 header:true,
-
 skipEmptyLines:true,
-
 complete:function(results){
 
 // Sanitize inputs to isolate row structural data lines
@@ -664,20 +552,15 @@ currentFilteredData = [...allData];
 buildTable(allData);
 populateFilters(allData);
 updateStats(allData);
-
 },
-
 error:function(err){
 console.log(err);
 alert("CSV Loading Failed");
 }
-
 });
 
 /* BUILD TABLE */
-
 function buildTable(data){
-
 let thead=document.querySelector("#placementTable thead");
 let tbody=document.querySelector("#placementTable tbody");
 
@@ -731,13 +614,10 @@ tr.appendChild(td);
 });
 tbody.appendChild(tr);
 });
-
 }
 
 /* POPULATE FILTER DROPDOWNS */
-
 function populateFilters(data){
-
 let batches=[...new Set(data.map(d=>d["Batch"]).filter(Boolean))];
 let branches=[...new Set(data.map(d=>d["Branch"]).filter(Boolean))];
 let companies=[...new Set(data.map(d=>d["Company Placed"]).filter(Boolean))];
@@ -765,7 +645,6 @@ companies.sort().forEach(v=> companySelect.add(new Option(v,v)));
 natures.sort().forEach(v=> natureSelect.add(new Option(v,v)));
 interns.sort().forEach(v=> internSelect.add(new Option(v,v)));
 genders.sort().forEach(v=> genderSelect.add(new Option(v,v)));
-
 }
 
 function updateCompanyFilter(filteredData){
@@ -782,7 +661,6 @@ companySelect.value = currentValue;
 }
 
 /* UPDATE STATISTICS */
-
 function updateStats(data){
 document.getElementById("totalOffers").innerText=data.length;
 let uniqueStudents=new Set();
@@ -793,9 +671,7 @@ document.getElementById("placedStudents").innerText=uniqueStudents.size;
 }
 
 /* APPLY COMPILATION FILTER ENGINE */
-
 function applyFilters(){
-
 let search=document.getElementById("search").value.toLowerCase();
 let minSalaryVal = parseFloat(document.getElementById("minSalary").value);
 let maxSalaryVal = parseFloat(document.getElementById("maxSalary").value);
@@ -808,7 +684,6 @@ let intern=document.getElementById("internFilter").value;
 let gender=document.getElementById("genderFilter").value;
 
 let filtered=allData.filter(row=>{
-
 let text=JSON.stringify(row).toLowerCase();
 let currentSalaryNum = NaN;
 
@@ -829,7 +704,6 @@ return text.includes(search)
 && (nature==="" || (row[natureKey] || "").trim()===nature)
 && (intern==="" || (row[internKey] || "").trim()===intern)
 && (gender==="" || (row["Gender"] || "").trim()===gender);
-
 });
 
 currentFilteredData = filtered;
@@ -837,7 +711,6 @@ currentFilteredData = filtered;
 updateCompanyFilter(filtered);
 buildTable(filtered);
 updateStats(filtered);
-
 }
 
 /* EXCEL SHEET EXPORT LOGIC */
@@ -872,7 +745,6 @@ function handleExcelExport() {
 }
 
 /* EVENT LISTENERS */
-
 document.getElementById("search").addEventListener("keyup",applyFilters);
 document.getElementById("minSalary").addEventListener("input",applyFilters);
 document.getElementById("maxSalary").addEventListener("input",applyFilters);
