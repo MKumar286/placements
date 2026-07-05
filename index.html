@@ -34,20 +34,20 @@ border-bottom: none;
 text-align: center;
 }
 
-/* HEADINGS WITH RICH LUXURY GRADIENT COLORS */
+/* MAIN HEADING WITH FLOATING PINK & WHITE GRADIENT COLORS */
 h1{
 font-size: 28px;
 font-weight: 800;
-background: linear-gradient(45deg, #ff7b00, #ffae00, #00e5ff, #ff007f);
+background: linear-gradient(90deg, #ff007f, #ffffff, #ff66b2, #ffffff, #ff007f);
 background-size: 200% auto;
-animation: premiumHeading 5s ease infinite;
+animation: floatingPinkWhite 5s ease infinite;
 -webkit-background-clip: text;
 -webkit-text-fill-color: transparent;
 margin-bottom: 2px;
 letter-spacing: 0.5px;
 }
 
-@keyframes premiumHeading {
+@keyframes floatingPinkWhite {
 0% { background-position: 0% center; }
 50% { background-position: 100% center; }
 100% { background-position: 0% center; }
@@ -90,7 +90,7 @@ border: 1px solid rgba(255,255,255,0.08);
 border-top: none;
 }
 
-/* UNIQUE COLORED BACKGROUNDS FOR FILTERS */
+/* THICK MAGENTA BACKGROUND FOR FILTERS */
 .controls input,
 .controls select,
 .salary-row-inputs input{
@@ -100,25 +100,25 @@ padding: 2px 6px;
 font-size: 12px;
 font-weight: 400;
 border-radius: 4px;
-border: 1px solid #30363d;
+border: 1px solid #ff007f;
 outline: none;
-background: #21262d; /* Custom dark colored filter background */
-color: #c9d1d9;
+background: #d80073; /* Rich Magenta */
+color: #ffffff;
 transition: all 0.2s ease;
 }
 
 .controls input::placeholder,
 .salary-row-inputs input::placeholder {
-color: #8b949e;
+color: #ffb3d9;
 }
 
-/* HIGHLIGHTED FILTER STATE COLORS ON FOCUS/ACTIVE */
+/* DIFFERENT HIGHLIGHTED FILTER STATE COLOR ON FOCUS */
 .controls input:focus,
 .controls select:focus,
 .salary-row-inputs input:focus{
-background: #262c36; /* Shifted background fill highlight color */
-border-color: #f1c40f; /* Vibrant high-contrast highlighted amber gold border */
-box-shadow: 0 0 6px rgba(241, 196, 15, 0.4);
+background: #6a00ff; /* Electric Purple Highlight */
+border-color: #00ffff; /* Neon Cyan Border Tint */
+box-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
 color: #ffffff;
 }
 
@@ -135,11 +135,10 @@ border-radius: 6px;
 border: 1px solid rgba(255,255,255,0.06);
 }
 
-/* Prefix Identifier text descriptor label styling block */
 .salary-prefix-label {
 font-size: 12px;
 font-weight: 700;
-color: #f1c40f; /* Highlighted gold */
+color: #ff66b2; /* Soft pink accent label */
 white-space: nowrap;
 flex-shrink: 0;
 letter-spacing: 0.5px;
@@ -156,8 +155,8 @@ margin-left: 5px;
 
 .salary-row-inputs input {
 max-width: 130px;
-background: #21262d;
-border: 1px solid #30363d;
+background: #d80073;
+border: 1px solid #ff007f;
 }
 
 .export-wrapper {
@@ -191,7 +190,7 @@ width: 100%;
 overflow-x: auto;
 overflow-y: hidden;
 border-radius: 8px;
-background: #0d1117;
+background: #ffffff;
 padding-bottom: 0;
 margin-top: 2px;
 border: 1px solid rgba(255,255,255,0.08);
@@ -202,10 +201,10 @@ border: 1px solid rgba(255,255,255,0.08);
 height: 8px;
 }
 .table-container::-webkit-scrollbar-track{
-background: #0d1117;
+background: #ffffff;
 }
 .table-container::-webkit-scrollbar-thumb{
-background: #30363d;
+background: #0044cc;
 border-radius: 4px;
 }
 
@@ -214,24 +213,23 @@ table{
 border-collapse: collapse;
 min-width: 100%;
 width: max-content;
-background: #0d1117;
-color: #c9d1d9;
+background: #ffffff;
+color: #000000;
 }
 
-/* TABLE HEADERS WITH GRADIENT METALLIC DESIGN COLORS */
+/* THICK SOLID BLUE BACKGROUND TABLE HEADERS WITH WHITE BOLD TEXT */
 th{
 padding: 6px 8px;
 font-size: 12px;
-font-weight: 700;
+font-weight: bold; /* Bold header text */
 text-align: center;
-background: linear-gradient(180deg, #2d333b, #1c2128); /* Smooth deep corporate metallic gradient background */
-color: #f0f6fc;
+background: #0044cc; /* Thick Solid Blue */
+color: #ffffff; /* White text */
 border: 1px solid #30363d;
 white-space: nowrap;
-box-shadow: inset 0 -1px 0 rgba(255,255,255,0.05);
 }
 
-/* PREMIUM CLEAN SOLID TABLE DATA ROW BACKGROUNDS */
+/* SOLID WHITE BACKGROUND FOR TABLE DATA CELLS */
 td{
 padding: 3px 8px;
 font-size: 12px;
@@ -240,38 +238,37 @@ text-align: center;
 white-space: nowrap;
 border: 1px solid #30363d;
 height: 24px;
+background: #ffffff; /* Solid White */
+color: #000000; /* Black text */
 }
 
-/* HIGH-CONTRAST DATA PACKAGING COLOR MATRIX */
-tr:nth-child(even) td {
-background: #1c2128; /* Solid deep clean background variation A */
-}
-tr:nth-child(odd) td {
-background: #22272e; /* Solid deep clean background variation B */
+/* OVERRIDE ALL DATA ROWS FOR CLEAN SOLID WHITE VIEW */
+tr td {
+background: #ffffff !important;
+color: #000000 !important;
 }
 
-/* HOVER EFFECT */
+/* LIGHT DATA HOVER TINT FOR EASY ACCESSIBILITY MAPPING */
 tbody tr:hover td {
-background: #2d333b; /* Clean row data highlight color shift */
+background: #eef5ff !important;
 }
 
 /* ACTION LINK COMPONENT */
 .link-btn{
-background: #21262d;
-color: #58a6ff;
+background: #0044cc;
+color: #ffffff;
 padding: 1px 6px;
 border-radius: 3px;
 text-decoration: none;
 font-size: 10px;
-font-weight: 400;
+font-weight: 700;
 display: inline-block;
-border: 1px solid #30363d;
+border: 1px solid #0033aa;
 transition: 0.2s;
 }
 
 .link-btn:hover{
-background: #30363d;
-color: #79c0ff;
+background: #0033aa;
 }
 
 /* MOBILE RESPONSIVENESS OVERRIDES */
@@ -463,10 +460,10 @@ a.target="_blank";
 a.className="link-btn";
 
 if(h.toLowerCase().includes("intern")){
-a.innerText="📄 Intern Letter";
+a.innerText="📄 Intern";
 }
 else if(h.toLowerCase().includes("offer")){
-a.innerText="📄 Offer Letter";
+a.innerText="📄 Offer";
 }
 else{
 a.innerText="📄 View";
