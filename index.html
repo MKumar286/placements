@@ -239,10 +239,25 @@ font-family: Arial, sans-serif;
 transition: all 0.2s ease;
 }
 
+.clickable-metrics-card.active-state {
+background: linear-gradient(135deg, #005f73, #0a9396);
+border-color: #00e5ff;
+box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+}
+
 .clickable-metrics-card:hover {
 background: rgba(255, 255, 255, 0.25);
 border-color: #00e5ff;
 transform: translateY(-1px);
+}
+
+.clickable-metrics-card.active-state:hover {
+background: linear-gradient(135deg, #0a9396, #94d2bd);
+color: #001219;
+}
+
+.clickable-metrics-card.active-state:hover .card-title-text {
+color: #001219;
 }
 
 .clickable-metrics-card:active {
@@ -550,7 +565,7 @@ min-width:1400px;
     </div>
     
     <button id="singlePlacementsCard" class="clickable-metrics-card">
-        <div class="card-title-text">🎯 Click here for Single Placements</div>
+        <div id="cardBtnText" class="card-title-text">🎯 Click here for Single Placements</div>
     </button>
     
     <button id="exportExcelBtn" class="micro-excel-btn">📥 Excel</button>
@@ -578,6 +593,7 @@ const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSlQ0WjFcZaI2eiKVt
 
 let allData=[];
 let currentFilteredData=[];
+let showSinglePlacementsOnly = false; // State persistence flag
 
 let natureKey="";
 let internKey="";
@@ -633,7 +649,7 @@ salaryKey = headers.find(
 h => h.toLowerCase().includes("salary") || h.toLowerCase().includes("lpa") || h.toLowerCase().includes("package")
 );
 
-// Sort incoming global dataset descending by highest package
+// Sort baseline data descending
 allData.sort((a, b) => parseSalaryValue(b) - parseSalaryValue(a));
 
 currentFilteredData = [...allData];
@@ -934,7 +950,6 @@ if(salariesList.length > 0) {
 }
 
 /* APPLY FILTERS */
-
 function applyFilters(){
 
 let search=document.getElementById("search")
@@ -955,9 +970,8 @@ let intern=document.getElementById("internFilter").value;
 
 let gender=document.getElementById("genderFilter").value;
 
-/* FILTER */
-
-let filtered=allData.filter(row=>{
+/* STEP 1: Process active dropdown/search filter layers */
+let filtered = allData.filter(row=>{
 
 let text=JSON.stringify(row).toLowerCase();
 
@@ -994,13 +1008,35 @@ return text.includes(search)
 
 });
 
+/* STEP 2: If the toggle state is active, isolate only the unique student records holding their highest salary */
+if (showSinglePlacementsOnly) {
+    let highestOfferMap = new Map();
+    filtered.forEach(row => {
+        let roll = row["Roll Number"];
+        if(roll) {
+            let trimmedRoll = roll.toString().trim();
+            let currentSalary = parseSalaryValue(row);
+            
+            if (!highestOfferMap.has(trimmedRoll)) {
+                highestOfferMap.set(trimmedRoll, row);
+            } else {
+                let existingRow = highestOfferMap.get(trimmedRoll);
+                let existingSalary = parseSalaryValue(existingRow);
+                if (currentSalary > existingSalary) {
+                    highestOfferMap.set(trimmedRoll, row);
+                }
+            }
+        }
+    });
+    filtered = Array.from(highestOfferMap.values());
+}
+
+// Ensure results are sorted descending by highest package
 filtered.sort((a, b) => parseSalaryValue(b) - parseSalaryValue(a));
 currentFilteredData = filtered; 
 
 updateCompanyFilter(filtered);
-  
 buildTable(filtered);
-
 updateStats(filtered);
 
 }
@@ -1037,39 +1073,24 @@ function handleExcelExport() {
   document.body.removeChild(virtualAnchor);
 }
 
-/* FIXED ACTION: Strictly maps unique roll numbers with their highest package offer record only */
+/* CARDS ACTION INTERACTION TOGGLE LAYER */
 function triggerSinglePlacementsAction() {
-  let highestOfferMap = new Map();
+  let cardBtn = document.getElementById("singlePlacementsCard");
+  let cardText = document.getElementById("cardBtnText");
   
-  // Iterate through active data view to trace only the absolute highest package for each roll number
-  currentFilteredData.forEach(row => {
-    let roll = row["Roll Number"];
-    if(roll) {
-      let trimmedRoll = roll.toString().trim();
-      let currentSalary = parseSalaryValue(row);
-      
-      if (!highestOfferMap.has(trimmedRoll)) {
-          highestOfferMap.set(trimmedRoll, row);
-      } else {
-          let existingRow = highestOfferMap.get(trimmedRoll);
-          let existingSalary = parseSalaryValue(existingRow);
-          // Overwrite if this newly checked offer possesses a superior payload metric
-          if (currentSalary > existingSalary) {
-              highestOfferMap.set(trimmedRoll, row);
-          }
-      }
-    }
-  });
-
-  // Collect map unique row references back into a clean list array
-  let singleHighestData = Array.from(highestOfferMap.values());
-
-  // Guarantee descending sort presentation configuration layout structure remains active
-  singleHighestData.sort((a, b) => parseSalaryValue(b) - parseSalaryValue(a));
-
-  currentFilteredData = singleHighestData;
-  buildTable(singleHighestData);
-  updateStats(singleHighestData);
+  // Toggle the boolean flag state
+  showSinglePlacementsOnly = !showSinglePlacementsOnly;
+  
+  if (showSinglePlacementsOnly) {
+      cardBtn.classList.add("active-state");
+      cardText.innerText = "📋 Show All Offers (Toggle)";
+  } else {
+      cardBtn.classList.remove("active-state");
+      cardText.innerText = "🎯 Click here for Single Placements";
+  }
+  
+  // Re-trigger global validation flow seamlessly
+  applyFilters();
 }
 
 /* EVENTS */
