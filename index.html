@@ -118,7 +118,7 @@ letter-spacing:1px;
 h3{
 
 font-size:18px;
-margin-top:2px
+margin-top:2px;
 font-weight:500;
 
 background:linear-gradient(90deg,#b2ff59,#00e5ff);
@@ -252,6 +252,39 @@ background:linear-gradient(90deg,#00c6ff,#0072ff);
 border-radius:10px;
 }
 
+/* ACTION BAR CONTAINER FOR EXCEL */
+.action-container {
+display: flex;
+justify-content: flex-end;
+margin: 6px 4px;
+}
+
+.micro-excel-btn {
+background: linear-gradient(135deg, #1d743a, #107c41);
+color: white;
+border: 1px solid rgba(255,255,255,0.2);
+padding: 4px 10px;
+border-radius: 5px;
+font-size: 11px;
+font-weight: bold;
+cursor: pointer;
+transition: 0.2s ease;
+box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+display: flex;
+align-items: center;
+gap: 4px;
+}
+
+.micro-excel-btn:hover {
+transform: scale(1.03);
+background: linear-gradient(135deg, #107c41, #0b592e);
+box-shadow: 0 4px 10px rgba(0,180,90,0.4);
+}
+
+.micro-excel-btn:active {
+transform: scale(0.97);
+}
+
 /* TABLE CONTAINER */
 
 .table-container{
@@ -339,7 +372,7 @@ text-align:center;
 background:linear-gradient(135deg,#141e30,#243b55);
 
 color:#ffffff;
-line-height:1.3
+line-height:1.3;
 border:1px solid rgba(255,255,255,0.12);
 
 white-space:nowrap;
@@ -465,9 +498,13 @@ width:145px;
 min-width:145px;
 
 height:28px;
-padding:3px 6px
+padding:3px 6px;
 font-size:12px;
 
+}
+
+.action-container {
+margin: 4px 2px;
 }
 
 th{
@@ -526,6 +563,9 @@ Total Placed Students :
 
 <input type="text" id="search" placeholder="Search student / roll / company">
 
+<input type="number" id="minSalary" step="any" placeholder="Min Salary (>=)">
+<input type="number" id="maxSalary" step="any" placeholder="Max Salary (<=)">
+
 <select id="batchFilter">
 <option value="">All Batches</option>
 </select>
@@ -552,6 +592,10 @@ Total Placed Students :
 
 </div>
 
+<div class="action-container">
+<button id="exportExcelBtn" class="micro-excel-btn">📥 Excel</button>
+</div>
+
 <div class="table-container">
 
 <table id="placementTable">
@@ -573,9 +617,11 @@ Total Placed Students :
 const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSlQ0WjFcZaI2eiKVtAqynVqs3H82MznXaV15n-qLjsDv6QL75g_7sQAhm0n6ZtiiDVKIB0MkuTNQ64/pub?gid=492329818&single=true&output=csv";
 
 let allData=[];
+let currentFilteredData=[]; // Used to keep track of currently active rows for Excel download
 
 let natureKey="";
 let internKey="";
+let salaryKey=""; // Dynamic reference mapping for the sheet's salary column
 
 /* LOAD CSV */
 
@@ -610,6 +656,13 @@ h => h.toLowerCase().includes("nature")
 internKey = headers.find(
 h => h.toLowerCase().includes("paid")
 );
+
+// Autodetects your column name by looking for keywords like salary, package, or lpa
+salaryKey = headers.find(
+h => h.toLowerCase().includes("salary") || h.toLowerCase().includes("lpa") || h.toLowerCase().includes("package")
+);
+
+currentFilteredData = [...allData];
 
 buildTable(allData);
 
@@ -887,6 +940,10 @@ function applyFilters(){
 let search=document.getElementById("search")
 .value.toLowerCase();
 
+// Grab dynamic numerical ranges
+let minSalaryVal = parseFloat(document.getElementById("minSalary").value);
+let maxSalaryVal = parseFloat(document.getElementById("maxSalary").value);
+
 let batch=document.getElementById("batchFilter").value;
 
 let branch=document.getElementById("branchFilter").value;
@@ -905,7 +962,22 @@ let filtered=allData.filter(row=>{
 
 let text=JSON.stringify(row).toLowerCase();
 
+// Numerical extraction parsing logic
+let currentSalaryNum = NaN;
+if(salaryKey && row[salaryKey]) {
+  let cleanedStr = row[salaryKey].toString().replace(/[^0-9.]/g, '');
+  if(cleanedStr.trim() !== "") {
+    currentSalaryNum = parseFloat(cleanedStr);
+  }
+}
+
+let fulfillsMinBound = isNaN(minSalaryVal) || (!isNaN(currentSalaryNum) && currentSalaryNum >= minSalaryVal);
+let fulfillsMaxBound = isNaN(maxSalaryVal) || (!isNaN(currentSalaryNum) && currentSalaryNum <= maxSalaryVal);
+
 return text.includes(search)
+
+&& fulfillsMinBound
+&& fulfillsMaxBound
 
 && (batch==="" || row["Batch"]===batch)
 
@@ -913,16 +985,18 @@ return text.includes(search)
 
 && (company==="" || row["Company Placed"]===company)
 
-&& (nature==="" ||
+&& (nature===\"\" ||
 (row[natureKey] || "").trim()===nature)
 
-&& (intern==="" ||
+&& (intern===\"\" ||
 (row[internKey] || "").trim()===intern)
 
-&& (gender==="" ||
+&& (gender===\"\" ||
 (row["Gender"] || "").trim()===gender);
 
 });
+
+currentFilteredData = filtered; // Keep track of active dataset mapping structure
 
 updateCompanyFilter(filtered);
   
@@ -932,10 +1006,49 @@ updateStats(filtered);
 
 }
 
+/* EXCEL DOWNLOAD CONTROLLER MAPPING CONFIGURATION */
+function handleExcelExport() {
+  if (!currentFilteredData || currentFilteredData.length === 0) {
+    alert("No active records available to download!");
+    return;
+  }
+  
+  let headers = Object.keys(currentFilteredData[0]);
+  let outputCSV = "\uFEFF"; // Byte Order Mark prevents encoding break inside desktop spreadsheet apps
+  
+  outputCSV += headers.map(h => `"${h.replace(/"/g, '""')}"`).join(",") + "\r\n";
+  
+  currentFilteredData.forEach(row => {
+    let rowLine = headers.map(h => {
+      let value = row[h] ? row[h].toString().trim() : "";
+      return `"${value.replace(/"/g, '""')}"`;
+    });
+    outputCSV += rowLine.join(",") + "\r\n";
+  });
+  
+  let binaryBlob = new Blob([outputCSV], { type: "text/csv;charset=utf-8;" });
+  let virtualAnchor = document.createElement("a");
+  let objectURL = URL.createObjectURL(binaryBlob);
+  
+  virtualAnchor.setAttribute("href", objectURL);
+  virtualAnchor.setAttribute("download", "MGIT_Filtered_Placements.csv");
+  virtualAnchor.style.visibility = "hidden";
+  document.body.appendChild(virtualAnchor);
+  virtualAnchor.click();
+  document.body.removeChild(virtualAnchor);
+}
+
 /* EVENTS */
 
 document.getElementById("search")
 .addEventListener("keyup",applyFilters);
+
+// Attach active query event tracking hooks to the input fields
+document.getElementById("minSalary")
+.addEventListener("input",applyFilters);
+
+document.getElementById("maxSalary")
+.addEventListener("input",applyFilters);
 
 document.getElementById("batchFilter")
 .addEventListener("change",applyFilters);
@@ -954,6 +1067,10 @@ document.getElementById("internFilter")
 
 document.getElementById("genderFilter")
 .addEventListener("change",applyFilters);
+
+// Click handler bridge setup for the download action
+document.getElementById("exportExcelBtn")
+.addEventListener("click", handleExcelExport);
 
 </script>
 
