@@ -162,14 +162,15 @@ color:white;
 
 }
 
-/* FILTER SECTION - RECONFIGURED FOR NO SCROLLING ROW */
+/* FILTER SECTION */
+
 .controls{
 
 margin-bottom:6px;
 
 display:flex;
 
-flex-wrap:wrap; /* Automatically scales items onto a single tight layer without generating side overflow bars */
+flex-wrap:wrap;
 
 gap:5px;
 
@@ -193,7 +194,7 @@ border-top:none;
 .controls input,
 .controls select{
 
-flex: 1 1 150px; /* Fluid item boundaries ensure precise horizontal fitting */
+flex: 1 1 150px;
 
 height:30px;
 
@@ -219,7 +220,7 @@ transition:0.3s;
 
 .controls input:focus,
 .controls select:focus,
-.action-container input:focus{
+.salary-filters-row input:focus{
 
 transform:scale(1.02);
 
@@ -229,25 +230,27 @@ border:1px solid #00c6ff;
 
 }
 
-/* SECOND ROW CONTAINER DESIGN SPECIFICATION TIGHT GAPS */
+/* LOWER ACTION LAYER ROW */
 .action-container {
 display: flex;
 justify-content: space-between;
 align-items: center;
-gap: 10px;
-margin: 6px 4px;
+gap: 15px;
+margin: 8px 4px;
+flex-wrap: wrap;
 }
 
-/* Compact salary filters container mapped with specific max-width constraints */
+/* Compact left-side salary inputs layout */
 .salary-filters-row {
 display: flex;
 gap: 5px;
 align-items: center;
+flex-shrink: 0;
 }
 
 .salary-filters-row input {
 width: 140px; 
-max-width: 140px; /* Forces limited specific width footprint */
+max-width: 140px;
 height: 30px;
 padding: 4px 8px;
 font-size: 12px;
@@ -263,11 +266,68 @@ transition: 0.3s;
 color: #555;
 }
 
+/* MICRO CLICKABLE CARD COMPONENT WITH EXACT FILTER SIZING MATCH */
+.clickable-metrics-card {
+flex: 1 1 auto;
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 15px;
+background: rgba(255, 255, 255, 0.15);
+border: 1px solid rgba(255, 255, 255, 0.25);
+padding: 4px 12px;
+border-radius: 8px;
+backdrop-filter: blur(5px);
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+height: 30px; /* Sized exactly as the other operational row filters */
+min-width: 250px;
+cursor: pointer;
+color: white;
+font-family: Arial, sans-serif;
+transition: all 0.2s ease;
+}
+
+.clickable-metrics-card:hover {
+background: rgba(255, 255, 255, 0.25);
+border-color: #00e5ff;
+transform: translateY(-1px);
+}
+
+.clickable-metrics-card:active {
+transform: translateY(1px);
+}
+
+.card-title-text {
+font-size: 11px;
+font-weight: bold;
+letter-spacing: 0.3px;
+text-transform: uppercase;
+color: #ffe082;
+white-space: nowrap;
+border-right: 1px solid rgba(255,255,255,0.3);
+padding-right: 10px;
+}
+
+.card-stat-item {
+font-size: 11px;
+font-weight: bold;
+color: #ffffff;
+white-space: nowrap;
+}
+
+.card-stat-item span {
+color: #00e5ff;
+font-size: 12px;
+margin-left: 2px;
+text-shadow: 0 0 4px rgba(0, 229, 255, 0.4);
+}
+
+/* RIGHT SIDE EXCEL ACTION */
 .micro-excel-btn {
 background: linear-gradient(135deg, #1d743a, #107c41);
 color: white;
 border: 1px solid rgba(255,255,255,0.2);
-padding: 4px 10px;
+padding: 4px 14px;
 border-radius: 5px;
 font-size: 11px;
 font-weight: bold;
@@ -278,6 +338,7 @@ display: flex;
 align-items: center;
 gap: 4px;
 height: 30px;
+flex-shrink: 0;
 }
 
 .micro-excel-btn:hover {
@@ -454,12 +515,10 @@ box-shadow:0 3px 10px rgba(0,0,0,0.2);
 
 }
 
-/* TARGETED HIGHLIGHT MODIFICATIONS FOR DYNAMIC LINKS (OFFER & INTERN LETTER MODES) */
 .link-btn:hover{
 
 transform:scale(1.06);
 
-/* High-contrast neon pop overlay shift when highlighted by cursor interaction */
 background:linear-gradient(135deg,#00f2fe,#4facfe) !important; 
 
 box-shadow:0 5px 15px rgba(0, 242, 254, 0.4);
@@ -485,48 +544,56 @@ font-size:15px;
 }
 
 .stats{
-
 font-size:13px;
-
 gap:12px;
-
 padding:6px;
-
 }
 
 .controls{
-
 padding:5px;
-
 gap:4px;
-
 }
 
 .controls input,
 .controls select{
-
 flex: 1 1 120px;
-
 height:28px;
 padding:3px 6px;
 font-size:11px;
-
 }
 
 .action-container {
 margin: 4px 2px;
 flex-direction: column;
 align-items: stretch;
-gap: 5px;
+gap: 8px;
 }
 
 .salary-filters-row {
 justify-content: space-between;
+width: 100%;
 }
 
 .salary-filters-row input {
 width: 49%;
 max-width: none;
+}
+
+.clickable-metrics-card {
+width: 100%;
+height: auto;
+padding: 6px 10px;
+flex-direction: column;
+gap: 3px;
+}
+
+.card-title-text {
+border-right: none;
+padding-right: 0;
+padding-bottom: 2px;
+border-bottom: 1px solid rgba(255,255,255,0.15);
+width: 100%;
+text-align: center;
 }
 
 .micro-excel-btn {
@@ -535,25 +602,17 @@ justify-content: center;
 }
 
 th{
-
 font-size:11px;
-
 padding:5px 6px;
-
 }
 
 td{
-
 font-size:11px;
-
 padding:4px 6px;
-
 }
 
 table{
-
 min-width:1400px;
-
 }
 
 }
@@ -590,29 +649,12 @@ Total Placed Students :
 
 <input type="text" id="search" placeholder="Search student / roll / company">
 
-<select id="batchFilter">
-<option value="">All Batches</option>
-</select>
-
-<select id="branchFilter">
-<option value="">All Branches</option>
-</select>
-
-<select id="companyFilter">
-<option value="">All Companies</option>
-</select>
-
-<select id="natureFilter">
-<option value="">Nature of the Company</option>
-</select>
-
-<select id="internFilter">
-<option value="">Internship Type</option>
-</select>
-
-<select id="genderFilter">
-<option value="">All Genders</option>
-</select>
+<select id="batchFilter"><option value="">All Batches</option></select>
+<select id="branchFilter"><option value="">All Branches</option></select>
+<select id="companyFilter"><option value="">All Companies</option></select>
+<select id="natureFilter"><option value="">Nature of the Company</option></select>
+<select id="internFilter"><option value="">Internship Type</option></select>
+<select id="genderFilter"><option value="">All Genders</option></select>
 
 </div>
 
@@ -621,6 +663,13 @@ Total Placed Students :
         <input type="number" id="minSalary" step="any" placeholder="Min Salary (>=)">
         <input type="number" id="maxSalary" step="any" placeholder="Max Salary (<=)">
     </div>
+    
+    <button id="singlePlacementsCard" class="clickable-metrics-card">
+        <div class="card-title-text">Click here Single Placements</div>
+        <div class="card-stat-item">Offers:<span id="cardOffers">0</span></div>
+        <div class="card-stat-item">Placed:<span id="cardPlaced">0</span></div>
+    </button>
+    
     <button id="exportExcelBtn" class="micro-excel-btn">📥 Excel</button>
 </div>
 
@@ -945,18 +994,24 @@ companySelect.value = currentValue;
 
 function updateStats(data){
 
-document.getElementById("totalOffers").innerText=data.length;
+document.getElementById("totalOffers").innerText=allData.length;
 
-let uniqueStudents=new Set();
-
-data.forEach(row=>{
-
-uniqueStudents.add(row["Roll Number"]);
-
+let uniqueStudentsGlobal=new Set();
+allData.forEach(row=>{
+uniqueStudentsGlobal.add(row["Roll Number"]);
 });
+document.getElementById("placedStudents").innerText=uniqueStudentsGlobal.size;
 
-document.getElementById("placedStudents").innerText=
-uniqueStudents.size;
+// Live synchronization updates to the card layout parameters
+document.getElementById("cardOffers").innerText=data.length;
+
+let uniqueStudentsCard=new Set();
+data.forEach(row=>{
+if(row["Roll Number"]) {
+  uniqueStudentsCard.add(row["Roll Number"]);
+}
+});
+document.getElementById("cardPlaced").innerText=uniqueStudentsCard.size;
 
 }
 
@@ -1063,6 +1118,32 @@ function handleExcelExport() {
   document.body.removeChild(virtualAnchor);
 }
 
+/* CARDS ACTION INTERACTION FUNCTION LAYER */
+function triggerSinglePlacementsAction() {
+  // Pull out students who only hold a single unique placement offer across your dataset records
+  let studentOfferCounts = {};
+  
+  allData.forEach(row => {
+    let roll = row["Roll Number"];
+    if(roll) {
+      studentOfferCounts[roll] = (studentOfferCounts[roll] || 0) + 1;
+    }
+  });
+
+  let singlePlacedData = allData.filter(row => {
+    let roll = row["Roll Number"];
+    return roll && studentOfferCounts[roll] === 1;
+  });
+
+  // Rebuild components using extracted single placement datasets
+  currentFilteredData = singlePlacedData;
+  buildTable(singlePlacedData);
+  
+  // Update live statistics counters within card grid spaces
+  document.getElementById("cardOffers").innerText = singlePlacedData.length;
+  document.getElementById("cardPlaced").innerText = singlePlacedData.length;
+}
+
 /* EVENTS */
 
 document.getElementById("search")
@@ -1094,6 +1175,10 @@ document.getElementById("genderFilter")
 
 document.getElementById("exportExcelBtn")
 .addEventListener("click", handleExcelExport);
+
+// Hook the interactive action script routing to the clickable mini analytics card
+document.getElementById("singlePlacementsCard")
+.addEventListener("click", triggerSinglePlacementsAction);
 
 </script>
 
