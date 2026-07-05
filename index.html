@@ -108,34 +108,66 @@ background:linear-gradient(90deg,#b2ff59,#00e5ff);
 -webkit-text-fill-color:transparent;
 }
 
-/* STATS - Visually Enhanced Dark Backdrop Container Layer */
+/* STATS - Forced into a unified Single Row Layout on Desktop Platforms */
 .stats{
 margin:0;
 font-weight:bold;
-font-size:15px;
+font-size:14px;
 display:flex;
-justify-content:center;
-gap:25px;
-flex-wrap:wrap;
+justify-content:space-between;
+gap:12px;
+flex-wrap: nowrap; /* Enforces strict single row structure alignment */
+overflow-x: auto;  /* Allows safe container overflow control gracefully */
 padding:12px 14px;
-background: rgba(10, 25, 47, 0.85); /* Clean Dark Premium Backdrop */
+background: rgba(10, 25, 47, 0.85); 
 border-radius:0;
-box-shadow:inset 0 0 15px rgba(255,255,255,0.05);
 border-left:1px solid rgba(255,255,255,0.15);
 border-right:1px solid rgba(255,255,255,0.15);
 border-bottom: 1px solid rgba(255,255,255,0.1);
 color:white;
 }
 
+/* Stats Scrollbar Cleanup rules for desktop overflow instances */
+.stats::-webkit-scrollbar {
+height: 4px;
+}
+.stats::-webkit-scrollbar-thumb {
+background: rgba(255, 255, 255, 0.2);
+border-radius: 4px;
+}
+
+/* STATS CARDS: Holographic floating Pink, Blue, and Green radial gradients backdrop layers */
 .stats div {
+flex: 1 1 0; /* Distributes spatial proportions flawlessly across identical metrics elements */
+min-width: 170px;
 display: flex;
 align-items: center;
+justify-content: center;
 gap: 6px;
-background: rgba(255, 255, 255, 0.05);
-padding: 6px 14px;
-border-radius: 8px;
-border: 1px solid rgba(255,255,255,0.12);
-backdrop-filter: blur(4px);
+padding: 10px 8px;
+border-radius: 10px;
+border: 1px solid rgba(255,255,255,0.18);
+backdrop-filter: blur(8px);
+box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+text-align: center;
+white-space: nowrap;
+}
+
+/* Custom individual card gradient declarations styles */
+.stats div:nth-child(1) {
+background: radial-gradient(circle at top left, rgba(247, 37, 133, 0.25), rgba(10, 25, 47, 0.6)); /* Floating Pink */
+}
+.stats div:nth-child(2) {
+background: radial-gradient(circle at top left, rgba(0, 180, 216, 0.25), rgba(10, 25, 47, 0.6));  /* Floating Blue */
+}
+.stats div:nth-child(3) {
+background: radial-gradient(circle at top left, rgba(112, 224, 0, 0.25), rgba(10, 25, 47, 0.6));  /* Floating Green */
+}
+.stats div:nth-child(4) {
+background: radial-gradient(circle at top left, rgba(0, 242, 254, 0.23), rgba(10, 25, 47, 0.6));  /* Neon Blue-Cyan variant */
+}
+.stats div:nth-child(5) {
+background: radial-gradient(circle at top left, rgba(255, 0, 150, 0.22), rgba(10, 25, 47, 0.6));  /* Magenta-Pink variant */
 }
 
 /* Icon Distinct Colors Custom Palette Definitions */
@@ -147,7 +179,7 @@ backdrop-filter: blur(4px);
 
 .stats span {
 color: #ffffff;
-font-size: 16px;
+font-size: 15px;
 margin-left: 4px;
 text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
@@ -423,7 +455,7 @@ box-shadow:0 3px 10px rgba(0,0,0,0.2);
 /* High-Visibility Neon Highlights applied cleanly on link document button hover */
 .link-btn:hover{
 transform:scale(1.06) translateY(-1px);
-background: linear-gradient(135deg, #00f2fe, #4facfe) !important; /* Vibrant High-Energy Electric Turquoise Highlight */
+background: linear-gradient(135deg, #00f2fe, #4facfe) !important; /* Vibrant Turquoise Highlight */
 box-shadow: 0 4px 15px rgba(0, 242, 254, 0.6);
 color:#ffffff !important;
 }
@@ -450,10 +482,13 @@ gap:8px;
 padding:8px;
 flex-direction: column;
 align-items: stretch;
+flex-wrap: wrap; /* Allows healthy wrapping patterns across dynamic layout viewports */
 }
 
 .stats div {
 justify-content: space-between;
+width: 100%;
+min-width: 0;
 }
 
 .controls{
@@ -1020,7 +1055,7 @@ return text.includes(search)
 
 });
 
-/* STEP 2: Properly group and capture unique roll numbers keeping only their highest offer */
+/* STEP 2: Group and capture unique roll numbers keeping only their highest offer */
 if (showSinglePlacementsOnly) {
     let groupedByRoll = {};
     
