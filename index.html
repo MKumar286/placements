@@ -593,7 +593,7 @@ const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSlQ0WjFcZaI2eiKVt
 
 let allData=[];
 let currentFilteredData=[];
-let showSinglePlacementsOnly = false; // State persistence flag
+let showSinglePlacementsOnly = false; 
 
 let natureKey="";
 let internKey="";
@@ -649,7 +649,7 @@ salaryKey = headers.find(
 h => h.toLowerCase().includes("salary") || h.toLowerCase().includes("lpa") || h.toLowerCase().includes("package")
 );
 
-// Sort baseline data descending
+// Initial baseline descending package sort configuration
 allData.sort((a, b) => parseSalaryValue(b) - parseSalaryValue(a));
 
 currentFilteredData = [...allData];
@@ -1008,30 +1008,33 @@ return text.includes(search)
 
 });
 
-/* STEP 2: If the toggle state is active, isolate only the unique student records holding their highest salary */
+/* STEP 2: FIX - Properly group and capture unique roll numbers keeping only their highest offer */
 if (showSinglePlacementsOnly) {
-    let highestOfferMap = new Map();
+    let groupedByRoll = {};
+    
+    // Group all matches by unique roll number first
     filtered.forEach(row => {
         let roll = row["Roll Number"];
-        if(roll) {
+        if (roll) {
             let trimmedRoll = roll.toString().trim();
-            let currentSalary = parseSalaryValue(row);
-            
-            if (!highestOfferMap.has(trimmedRoll)) {
-                highestOfferMap.set(trimmedRoll, row);
-            } else {
-                let existingRow = highestOfferMap.get(trimmedRoll);
-                let existingSalary = parseSalaryValue(existingRow);
-                if (currentSalary > existingSalary) {
-                    highestOfferMap.set(trimmedRoll, row);
-                }
+            if (!groupedByRoll[trimmedRoll]) {
+                groupedByRoll[trimmedRoll] = [];
             }
+            groupedByRoll[trimmedRoll].push(row);
         }
     });
-    filtered = Array.from(highestOfferMap.values());
+    
+    let singleHighestData = [];
+    // Select strictly the absolute highest paying row option for every group container
+    for (let roll in groupedByRoll) {
+        let studentRows = groupedByRoll[roll];
+        studentRows.sort((a, b) => parseSalaryValue(b) - parseSalaryValue(a));
+        singleHighestData.push(studentRows[0]);
+    }
+    filtered = singleHighestData;
 }
 
-// Ensure results are sorted descending by highest package
+// Ensure rows are sorted package descending
 filtered.sort((a, b) => parseSalaryValue(b) - parseSalaryValue(a));
 currentFilteredData = filtered; 
 
@@ -1078,7 +1081,6 @@ function triggerSinglePlacementsAction() {
   let cardBtn = document.getElementById("singlePlacementsCard");
   let cardText = document.getElementById("cardBtnText");
   
-  // Toggle the boolean flag state
   showSinglePlacementsOnly = !showSinglePlacementsOnly;
   
   if (showSinglePlacementsOnly) {
@@ -1089,7 +1091,6 @@ function triggerSinglePlacementsAction() {
       cardText.innerText = "🎯 Click here for Single Placements";
   }
   
-  // Re-trigger global validation flow seamlessly
   applyFilters();
 }
 
