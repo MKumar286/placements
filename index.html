@@ -198,7 +198,8 @@ scroll-behavior:smooth;
 /* FILTERS */
 
 .controls input,
-.controls select{
+.controls select,
+.action-container input{
 
 flex:0 0 auto;
 
@@ -219,14 +220,26 @@ outline:none;
 
 background:rgba(255,255,255,0.92);
 
+color: #000;
+
 transition:0.3s;
 
+}
+
+.action-container input {
+background: rgba(255, 255, 255, 0.95);
+color: #000;
+}
+
+.action-container input::placeholder {
+color: #666;
 }
 
 /* FOCUS */
 
 .controls input:focus,
-.controls select:focus{
+.controls select:focus,
+.action-container input:focus{
 
 transform:scale(1.02);
 
@@ -252,10 +265,12 @@ background:linear-gradient(90deg,#00c6ff,#0072ff);
 border-radius:10px;
 }
 
-/* ACTION BAR CONTAINER FOR EXCEL */
+/* ACTION BAR CONTAINER FOR EXCEL AND SALARY FILTERS */
 .action-container {
 display: flex;
 justify-content: flex-end;
+align-items: center;
+gap: 10px;
 margin: 6px 4px;
 }
 
@@ -273,6 +288,7 @@ box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 display: flex;
 align-items: center;
 gap: 4px;
+height: 30px;
 }
 
 .micro-excel-btn:hover {
@@ -505,6 +521,20 @@ font-size:12px;
 
 .action-container {
 margin: 4px 2px;
+flex-wrap: wrap;
+justify-content: center;
+}
+
+.action-container input {
+width: 145px;
+min-width: 145px;
+height: 28px;
+}
+
+.micro-excel-btn {
+width: 100%;
+margin-top: 4px;
+justify-content: center;
 }
 
 th{
@@ -563,9 +593,6 @@ Total Placed Students :
 
 <input type="text" id="search" placeholder="Search student / roll / company">
 
-<input type="number" id="minSalary" step="any" placeholder="Min Salary (>=)">
-<input type="number" id="maxSalary" step="any" placeholder="Max Salary (<=)">
-
 <select id="batchFilter">
 <option value="">All Batches</option>
 </select>
@@ -593,6 +620,8 @@ Total Placed Students :
 </div>
 
 <div class="action-container">
+<input type="number" id="minSalary" step="any" placeholder="Min Salary (>=)">
+<input type="number" id="maxSalary" step="any" placeholder="Max Salary (<=)">
 <button id="exportExcelBtn" class="micro-excel-btn">📥 Excel</button>
 </div>
 
@@ -617,11 +646,11 @@ Total Placed Students :
 const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSlQ0WjFcZaI2eiKVtAqynVqs3H82MznXaV15n-qLjsDv6QL75g_7sQAhm0n6ZtiiDVKIB0MkuTNQ64/pub?gid=492329818&single=true&output=csv";
 
 let allData=[];
-let currentFilteredData=[]; // Used to keep track of currently active rows for Excel download
+let currentFilteredData=[]; 
 
 let natureKey="";
 let internKey="";
-let salaryKey=""; // Dynamic reference mapping for the sheet's salary column
+let salaryKey=""; 
 
 /* LOAD CSV */
 
@@ -657,7 +686,6 @@ internKey = headers.find(
 h => h.toLowerCase().includes("paid")
 );
 
-// Autodetects your column name by looking for keywords like salary, package, or lpa
 salaryKey = headers.find(
 h => h.toLowerCase().includes("salary") || h.toLowerCase().includes("lpa") || h.toLowerCase().includes("package")
 );
@@ -940,7 +968,6 @@ function applyFilters(){
 let search=document.getElementById("search")
 .value.toLowerCase();
 
-// Grab dynamic numerical ranges
 let minSalaryVal = parseFloat(document.getElementById("minSalary").value);
 let maxSalaryVal = parseFloat(document.getElementById("maxSalary").value);
 
@@ -962,7 +989,6 @@ let filtered=allData.filter(row=>{
 
 let text=JSON.stringify(row).toLowerCase();
 
-// Numerical extraction parsing logic
 let currentSalaryNum = NaN;
 if(salaryKey && row[salaryKey]) {
   let cleanedStr = row[salaryKey].toString().replace(/[^0-9.]/g, '');
@@ -985,18 +1011,18 @@ return text.includes(search)
 
 && (company==="" || row["Company Placed"]===company)
 
-&& (nature===\"\" ||
+&& (nature==="" ||
 (row[natureKey] || "").trim()===nature)
 
-&& (intern===\"\" ||
+&& (intern==="" ||
 (row[internKey] || "").trim()===intern)
 
-&& (gender===\"\" ||
+&& (gender==="" ||
 (row["Gender"] || "").trim()===gender);
 
 });
 
-currentFilteredData = filtered; // Keep track of active dataset mapping structure
+currentFilteredData = filtered; 
 
 updateCompanyFilter(filtered);
   
@@ -1006,7 +1032,7 @@ updateStats(filtered);
 
 }
 
-/* EXCEL DOWNLOAD CONTROLLER MAPPING CONFIGURATION */
+/* EXCEL DOWNLOAD CONTROLLER */
 function handleExcelExport() {
   if (!currentFilteredData || currentFilteredData.length === 0) {
     alert("No active records available to download!");
@@ -1014,7 +1040,7 @@ function handleExcelExport() {
   }
   
   let headers = Object.keys(currentFilteredData[0]);
-  let outputCSV = "\uFEFF"; // Byte Order Mark prevents encoding break inside desktop spreadsheet apps
+  let outputCSV = "\uFEFF"; 
   
   outputCSV += headers.map(h => `"${h.replace(/"/g, '""')}"`).join(",") + "\r\n";
   
@@ -1043,7 +1069,6 @@ function handleExcelExport() {
 document.getElementById("search")
 .addEventListener("keyup",applyFilters);
 
-// Attach active query event tracking hooks to the input fields
 document.getElementById("minSalary")
 .addEventListener("input",applyFilters);
 
@@ -1068,7 +1093,6 @@ document.getElementById("internFilter")
 document.getElementById("genderFilter")
 .addEventListener("change",applyFilters);
 
-// Click handler bridge setup for the download action
 document.getElementById("exportExcelBtn")
 .addEventListener("click", handleExcelExport);
 
