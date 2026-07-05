@@ -583,6 +583,18 @@ let natureKey="";
 let internKey="";
 let salaryKey=""; 
 
+/* Helper function to parse numbers from salary strings */
+function parseSalaryValue(row) {
+    if (salaryKey && row[salaryKey]) {
+        let cleanedStr = row[salaryKey].toString().replace(/[^0-9.]/g, '');
+        if (cleanedStr.trim() !== "") {
+            let num = parseFloat(cleanedStr);
+            return isNaN(num) ? 0 : num;
+        }
+    }
+    return 0;
+}
+
 /* LOAD CSV */
 
 Papa.parse(csvURL,{
@@ -620,6 +632,9 @@ h => h.toLowerCase().includes("paid")
 salaryKey = headers.find(
 h => h.toLowerCase().includes("salary") || h.toLowerCase().includes("lpa") || h.toLowerCase().includes("package")
 );
+
+// Sort incoming global dataset descending by highest package
+allData.sort((a, b) => parseSalaryValue(b) - parseSalaryValue(a));
 
 currentFilteredData = [...allData];
 
@@ -875,10 +890,8 @@ companySelect.value = currentValue;
 
 /* REAL-TIME DYNAMIC STATS RE-CALCULATION CONTROLLER */
 function updateStats(data){
-// 1. Total Offers: Dynamic count of data rows actively displayed
 document.getElementById("totalOffers").innerText = data.length;
 
-// 2. Placed Students: Unique count of Roll Numbers across active rows
 let uniqueStudents = new Set();
 let salariesList = [];
 let totalSalarySum = 0;
@@ -888,34 +901,26 @@ data.forEach(row => {
         uniqueStudents.add(row["Roll Number"].toString().trim());
     }
     
-    // Parse individual packaging parameters for algorithmic analysis
-    if(salaryKey && row[salaryKey]) {
-        let cleanedStr = row[salaryKey].toString().replace(/[^0-9.]/g, '');
-        if(cleanedStr.trim() !== "") {
-            let num = parseFloat(cleanedStr);
-            if(!isNaN(num)) {
-                salariesList.push(num);
-                totalSalarySum += num;
-            }
-        }
+    let num = parseSalaryValue(row);
+    if(num > 0 || (salaryKey && row[salaryKey] && row[salaryKey].toString().replace(/[^0-9.]/g, '').trim() !== "")) {
+        salariesList.push(num);
+        totalSalarySum += num;
     }
 });
 document.getElementById("placedStudents").innerText = uniqueStudents.size;
 
-// 3. Mathematical Calculations (Max, Median, Mean)
 if(salariesList.length > 0) {
-    // Sort array values chronologically to properly evaluate bounds & thresholds
-    salariesList.sort((a, b) => a - b);
+    let sortedSalaries = [...salariesList].sort((a, b) => a - b);
     
-    let maxSalary = salariesList[salariesList.length - 1];
+    let maxSalary = sortedSalaries[sortedSalaries.length - 1];
     let avgSalary = totalSalarySum / salariesList.length;
     let medianSalary = 0;
     
-    let half = Math.floor(salariesList.length / 2);
-    if(salariesList.length % 2 !== 0) {
-        medianSalary = salariesList[half];
+    let half = Math.floor(sortedSalaries.length / 2);
+    if(sortedSalaries.length % 2 !== 0) {
+        medianSalary = sortedSalaries[half];
     } else {
-        medianSalary = (salariesList[half - 1] + salariesList[half]) / 2.0;
+        medianSalary = (sortedSalaries[half - 1] + sortedSalaries[half]) / 2.0;
     }
     
     document.getElementById("highestPackage").innerText = maxSalary.toFixed(2) + " LPA";
@@ -989,6 +994,7 @@ return text.includes(search)
 
 });
 
+filtered.sort((a, b) => parseSalaryValue(b) - parseSalaryValue(a));
 currentFilteredData = filtered; 
 
 updateCompanyFilter(filtered);
@@ -1031,25 +1037,39 @@ function handleExcelExport() {
   document.body.removeChild(virtualAnchor);
 }
 
-/* CARDS ACTION INTERACTION FUNCTION LAYER */
+/* FIXED ACTION: Strictly maps unique roll numbers with their highest package offer record only */
 function triggerSinglePlacementsAction() {
-  let studentOfferCounts = {};
+  let highestOfferMap = new Map();
   
-  allData.forEach(row => {
+  // Iterate through active data view to trace only the absolute highest package for each roll number
+  currentFilteredData.forEach(row => {
     let roll = row["Roll Number"];
     if(roll) {
-      studentOfferCounts[roll] = (studentOfferCounts[roll] || 0) + 1;
+      let trimmedRoll = roll.toString().trim();
+      let currentSalary = parseSalaryValue(row);
+      
+      if (!highestOfferMap.has(trimmedRoll)) {
+          highestOfferMap.set(trimmedRoll, row);
+      } else {
+          let existingRow = highestOfferMap.get(trimmedRoll);
+          let existingSalary = parseSalaryValue(existingRow);
+          // Overwrite if this newly checked offer possesses a superior payload metric
+          if (currentSalary > existingSalary) {
+              highestOfferMap.set(trimmedRoll, row);
+          }
+      }
     }
   });
 
-  let singlePlacedData = allData.filter(row => {
-    let roll = row["Roll Number"];
-    return roll && studentOfferCounts[roll] === 1;
-  });
+  // Collect map unique row references back into a clean list array
+  let singleHighestData = Array.from(highestOfferMap.values());
 
-  currentFilteredData = singlePlacedData;
-  buildTable(singlePlacedData);
-  updateStats(singlePlacedData);
+  // Guarantee descending sort presentation configuration layout structure remains active
+  singleHighestData.sort((a, b) => parseSalaryValue(b) - parseSalaryValue(a));
+
+  currentFilteredData = singleHighestData;
+  buildTable(singleHighestData);
+  updateStats(singleHighestData);
 }
 
 /* EVENTS */
