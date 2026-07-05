@@ -15,314 +15,483 @@ box-sizing:border-box;
 }
 
 body{
-font-family: Arial, sans-serif;
-padding: 8px;
+font-family:Arial, sans-serif;
+padding:15px;
 overflow-x:hidden;
 color:white;
-background: #0d1117;
+background:linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#1c1c3c);
+background-size:400% 400%;
+animation:bgMove 15s ease infinite;
 min-height:100vh;
 }
 
-/* HEADER SECTION */
+/* Animated Background */
+
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* Floating Glow */
+
+body::before{
+content:"";
+position:fixed;
+width:500px;
+height:500px;
+background:rgba(0,198,255,0.15);
+border-radius:50%;
+top:-120px;
+left:-120px;
+filter:blur(100px);
+animation:float1 10s infinite alternate;
+z-index:-1;
+}
+
+body::after{
+content:"";
+position:fixed;
+width:400px;
+height:400px;
+background:rgba(255,0,150,0.15);
+border-radius:50%;
+bottom:-100px;
+right:-100px;
+filter:blur(100px);
+animation:float2 12s infinite alternate;
+z-index:-1;
+}
+
+@keyframes float1{
+from{transform:translateY(0px);}
+to{transform:translateY(80px);}
+}
+
+@keyframes float2{
+from{transform:translateX(0px);}
+to{transform:translateX(-80px);}
+}
+
+/* HEADER */
+
 .header-box{
-background: linear-gradient(135deg, #161b22, #0d1117);
-padding: 10px;
-border-radius: 12px 12px 0 0;
-margin-bottom: 0;
-border: 1px solid rgba(255,255,255,0.08);
-border-bottom: none;
-text-align: center;
+
+background:linear-gradient(135deg,#000814,#001d3d,#003566);
+
+padding:6px 10px;
+
+border-radius:18px 18px 0 0;
+
+margin-bottom:0;
+
+box-shadow:0 6px 20px rgba(0,0,0,0.35);
+
+border:1px solid rgba(255,255,255,0.15);
+
+border-bottom:none;
+
+text-align:center;
+
 }
 
-/* MAIN HEADING WITH FLOATING PINK & WHITE GRADIENT COLORS */
+
+/* HEADINGS */
+
 h1{
-font-size: 28px;
-font-weight: 800;
-background: linear-gradient(90deg, #ff007f, #ffffff, #ff66b2, #ffffff, #ff007f);
-background-size: 200% auto;
-animation: floatingPinkWhite 5s ease infinite;
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-margin-bottom: 2px;
-letter-spacing: 0.5px;
-}
 
-@keyframes floatingPinkWhite {
-0% { background-position: 0% center; }
-50% { background-position: 100% center; }
-100% { background-position: 0% center; }
+font-size:34px;
+
+font-weight:bold;
+
+background:linear-gradient(90deg,#ffffff,#ffe082,#ffffff);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+margin-bottom:8px;
+
+letter-spacing:1px;
+
 }
 
 h3{
-font-size: 14px;
-margin-top: 0;
-font-weight: 600;
-color: #8b949e;
+
+font-size:18px;
+margin-top:2px
+font-weight:500;
+
+background:linear-gradient(90deg,#b2ff59,#00e5ff);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
 }
 
 /* STATS */
+
 .stats{
-margin: 0;
-font-weight: 700;
-font-size: 14px;
-display: flex;
-justify-content: center;
-gap: 20px;
-flex-wrap: wrap;
-padding: 6px 12px;
-background: #1f242c;
-border-radius: 0;
-border-left: 1px solid rgba(255,255,255,0.08);
-border-right: 1px solid rgba(255,255,255,0.08);
-color: #58a6ff;
+
+margin:0;
+
+font-weight:bold;
+
+font-size:18px;
+
+display:flex;
+
+justify-content:center;
+
+gap:25px;
+
+flex-wrap:wrap;
+
+padding:8px 12px;
+
+background: linear-gradient(135deg, #064420, #0b6b35);
+
+border-radius:0;
+
+box-shadow:none;
+
+border-left:1px solid rgba(255,255,255,0.15);
+
+border-right:1px solid rgba(255,255,255,0.15);
+
+color:white;
+
 }
 
 /* FILTER SECTION */
+
 .controls{
-margin-bottom: 0;
-display: flex;
-flex-wrap: wrap;
-gap: 5px;
-background: #161b22;
-padding: 6px 8px;
-border-radius: 0 0 12px 12px;
-border: 1px solid rgba(255,255,255,0.08);
-border-top: none;
-}
 
-/* THICK MAGENTA BACKGROUND FOR FILTERS */
+margin-bottom:6px;
+
+display:flex;
+
+flex-wrap:nowrap;
+
+gap:6px;
+
+background:rgba(255,255,255,0.12);
+
+padding:6px 8px;
+
+border-radius:0 0 14px 14px;
+
+backdrop-filter:blur(10px);
+
+box-shadow:0 6px 20px rgba(0,0,0,0.25);
+
+border:1px solid rgba(255,255,255,0.15);
+
+border-top:none;
+
+overflow-x:auto;
+
+overflow-y:hidden;
+
+scroll-behavior:smooth;
+
+}
+/* FILTERS */
+
 .controls input,
-.controls select,
-.salary-row-inputs input{
-flex: 1 1 160px;
-height: 28px;
-padding: 2px 6px;
-font-size: 12px;
-font-weight: 400;
-border-radius: 4px;
-border: 1px solid #ff007f;
-outline: none;
-background: #d80073; /* Rich Magenta */
-color: #ffffff;
-transition: all 0.2s ease;
+.controls select{
+
+flex:0 0 auto;
+
+width:170px;
+min-width:170px;
+
+height:30px;
+
+padding:4px 8px;
+
+font-size:12px;
+
+border-radius:8px;
+
+border:1px solid rgba(255,255,255,0.2);
+
+outline:none;
+
+background:rgba(255,255,255,0.92);
+
+transition:0.3s;
+
 }
 
-.controls input::placeholder,
-.salary-row-inputs input::placeholder {
-color: #ffb3d9;
-}
+/* FOCUS */
 
-/* DIFFERENT HIGHLIGHTED FILTER STATE COLOR ON FOCUS */
 .controls input:focus,
-.controls select:focus,
-.salary-row-inputs input:focus{
-background: #6a00ff; /* Electric Purple Highlight */
-border-color: #00ffff; /* Neon Cyan Border Tint */
-box-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
-color: #ffffff;
+.controls select:focus{
+
+transform:scale(1.02);
+
+box-shadow:0 0 10px rgba(255,255,255,0.5);
+
+border:1px solid #00c6ff;
+
 }
 
-/* SECOND ROW ACTION AND SALARY FILTER CONTAINER */
-.action-salary-container {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin: 4px 0;
-gap: 6px;
-background: #161b22;
-padding: 4px 8px;
-border-radius: 6px;
-border: 1px solid rgba(255,255,255,0.06);
+/* FILTER SCROLLBAR */
+
+.controls::-webkit-scrollbar{
+height:7px;
 }
 
-.salary-prefix-label {
-font-size: 12px;
-font-weight: 700;
-color: #ff66b2; /* Soft pink accent label */
-white-space: nowrap;
-flex-shrink: 0;
-letter-spacing: 0.5px;
+.controls::-webkit-scrollbar-track{
+background:rgba(255,255,255,0.08);
+border-radius:10px;
 }
 
-.salary-row-inputs {
-display: flex;
-gap: 5px;
-align-items: center;
-justify-content: flex-start;
-flex-grow: 1;
-margin-left: 5px;
-}
-
-.salary-row-inputs input {
-max-width: 130px;
-background: #d80073;
-border: 1px solid #ff007f;
-}
-
-.export-wrapper {
-flex-shrink: 0;
-display: flex;
-justify-content: flex-end;
-}
-
-.micro-excel-btn {
-background: #238636;
-color: white;
-border: 1px solid rgba(255,255,255,0.1);
-padding: 4px 10px;
-border-radius: 4px;
-font-size: 11px;
-font-weight: 600;
-cursor: pointer;
-transition: 0.2s;
-display: flex;
-align-items: center;
-gap: 4px;
-}
-
-.micro-excel-btn:hover {
-background: #2ea44f;
+.controls::-webkit-scrollbar-thumb{
+background:linear-gradient(90deg,#00c6ff,#0072ff);
+border-radius:10px;
 }
 
 /* TABLE CONTAINER */
+
 .table-container{
-width: 100%;
-overflow-x: auto;
-overflow-y: hidden;
-border-radius: 8px;
-background: #ffffff;
-padding-bottom: 0;
-margin-top: 2px;
-border: 1px solid rgba(255,255,255,0.08);
+
+width:100%;
+
+overflow-x:auto;
+
+overflow-y:hidden;
+
+border-radius:18px;
+
+box-shadow:0 8px 25px rgba(0,0,0,0.35);
+
+scroll-behavior:smooth;
+
+background:rgba(255,255,255,0.05);
+
+padding-bottom:6px;
+
 }
 
-/* SCROLLBAR */
+/* TABLE SCROLLBAR */
+
 .table-container::-webkit-scrollbar{
-height: 8px;
+
+height:10px;
+
 }
+
 .table-container::-webkit-scrollbar-track{
-background: #ffffff;
+
+background:rgba(255,255,255,0.08);
+
+border-radius:10px;
+
 }
+
 .table-container::-webkit-scrollbar-thumb{
-background: #0044cc;
-border-radius: 4px;
+
+background:linear-gradient(90deg,#ff512f,#dd2476);
+
+border-radius:10px;
+
+}
+
+.table-container::-webkit-scrollbar-thumb:hover{
+
+background:linear-gradient(90deg,#00c6ff,#0072ff);
+
 }
 
 /* TABLE */
+
 table{
-border-collapse: collapse;
-min-width: 100%;
-width: max-content;
-background: #ffffff;
-color: #000000;
+
+border-collapse:collapse;
+
+min-width:1600px;
+
+width:max-content;
+
+background:#ffffff;
+
+color:#222;
+
+border-radius:18px;
+
+overflow:hidden;
+
 }
 
-/* THICK SOLID BLUE BACKGROUND TABLE HEADERS WITH WHITE BOLD TEXT */
+/* TABLE HEADER */
+
 th{
-padding: 6px 8px;
-font-size: 12px;
-font-weight: bold; /* Bold header text */
-text-align: center;
-background: #0044cc; /* Thick Solid Blue */
-color: #ffffff; /* White text */
-border: 1px solid #30363d;
-white-space: nowrap;
+
+padding:8px 9px;
+
+font-size:13px;
+
+font-weight:bold;
+
+text-align:center;
+
+background:linear-gradient(135deg,#141e30,#243b55);
+
+color:#ffffff;
+line-height:1.3
+border:1px solid rgba(255,255,255,0.12);
+
+white-space:nowrap;
+
 }
 
-/* SOLID WHITE BACKGROUND FOR TABLE DATA CELLS */
+/* TABLE DATA */
+
 td{
-padding: 3px 8px;
-font-size: 12px;
-font-weight: 400;
-text-align: center;
-white-space: nowrap;
-border: 1px solid #30363d;
-height: 24px;
-background: #ffffff; /* Solid White */
-color: #000000; /* Black text */
+
+padding:5px 9px;
+
+font-size:12px;
+
+font-weight:500;
+
+text-align:center;
+
+white-space:nowrap;
+
+border:1px solid rgba(16,37,66,0.12);
+
 }
 
-/* OVERRIDE ALL DATA ROWS FOR CLEAN SOLID WHITE VIEW */
-tr td {
-background: #ffffff !important;
-color: #000000 !important;
+/* ROW COLORS */
+
+tr:nth-child(even){
+
+background:#eef5ff;
+
 }
 
-/* LIGHT DATA HOVER TINT FOR EASY ACCESSIBILITY MAPPING */
-tbody tr:hover td {
-background: #eef5ff !important;
+tr:nth-child(odd){
+
+background:#ffffff;
+
 }
 
-/* ACTION LINK COMPONENT */
+/* HOVER */
+
+tbody tr:hover{
+
+background:#ffd180;
+
+transition:0.3s;
+
+}
+
+/* BUTTON */
+
 .link-btn{
-background: #0044cc;
-color: #ffffff;
-padding: 1px 6px;
-border-radius: 3px;
-text-decoration: none;
-font-size: 10px;
-font-weight: 700;
-display: inline-block;
-border: 1px solid #0033aa;
-transition: 0.2s;
+
+background:linear-gradient(135deg,#667eea,#764ba2);
+
+color:white;
+
+padding:3px 8px;
+
+border-radius:6px;
+
+text-decoration:none;
+
+font-size:10px;
+
+font-weight:bold;
+  
+line-height:1.2;
+
+display:inline-block;
+
+transition:0.3s;
+
+box-shadow:0 3px 10px rgba(0,0,0,0.2);
+
 }
 
 .link-btn:hover{
-background: #0033aa;
+
+transform:scale(1.06);
+
+background:linear-gradient(135deg,#43cea2,#185a9d);
+
 }
 
-/* MOBILE RESPONSIVENESS OVERRIDES */
+/* MOBILE */
+
 @media(max-width:768px){
+
 body{
-padding: 4px;
+padding:10px;
 }
+
 h1{
-font-size: 20px;
+font-size:22px;
 }
+
 h3{
-font-size: 12px;
+font-size:15px;
 }
+
 .stats{
-font-size: 12px;
-gap: 10px;
-padding: 4px;
+
+font-size:13px;
+
+gap:12px;
+
+padding:6px;
+
 }
+
 .controls{
-padding: 4px;
-gap: 4px;
+
+padding:5px;
+
+gap:5px;
+
 }
+
 .controls input,
 .controls select{
-flex: 1 1 120px;
-height: 26px;
-font-size: 11px;
+
+width:145px;
+min-width:145px;
+
+height:28px;
+padding:3px 6px
+font-size:12px;
+
 }
-.action-salary-container {
-flex-direction: column;
-align-items: flex-start;
-margin: 4px 0;
-gap: 6px;
-padding: 6px;
+
+th{
+
+font-size:11px;
+
+padding:5px 6px;
+
 }
-.salary-row-inputs {
-width: 100%;
-margin-left: 0;
+
+td{
+
+font-size:11px;
+
+padding:4px 6px;
+
 }
-.salary-row-inputs input {
-width: 50%;
-max-width: none;
+
+table{
+
+min-width:1400px;
+
 }
-.export-wrapper {
-width: 100%;
-}
-.micro-excel-btn {
-width: 100%;
-justify-content: center;
-}
-th, td{
-font-size: 11px;
-padding: 3px 4px;
-}
+
 }
 
 </style>
@@ -332,292 +501,459 @@ padding: 3px 4px;
 <body>
 
 <div class="header-box">
-    <h1>MGIT Placement Records</h1>
-    <h3>Academic Year 2025 - 2026</h3>
+
+<h1>MGIT Placement Records</h1>
+
+<h3>Academic Year 2025 - 2026</h3>
+
 </div>
 
 <div class="stats">
-    <div>Total Offers : <span id="totalOffers">0</span></div>
-    <div>Total Placed Students : <span id="placedStudents">0</span></div>
+
+<div>
+Total Offers :
+<span id="totalOffers">0</span>
+</div>
+
+<div>
+Total Placed Students :
+<span id="placedStudents">0</span>
+</div>
+
 </div>
 
 <div class="controls">
-    <input type="text" id="search" placeholder="Search student / roll / company">
-    
-    <select id="batchFilter"><option value="">All Batches</option></select>
-    <select id="branchFilter"><option value="">All Branches</option></select>
-    <select id="companyFilter"><option value="">All Companies</option></select>
-    <select id="natureFilter"><option value="">Nature of the Company</option></select>
-    <select id="internFilter"><option value="">Internship Type</option></select>
-    <select id="genderFilter"><option value="">All Genders</option></select>
-</div>
 
-<div class="action-salary-container">
-    <div class="salary-prefix-label">Salary Range:</div>
-    
-    <div class="salary-row-inputs">
-        <input type="number" id="minSalary" step="any" placeholder="Min Salary (>=)">
-        <input type="number" id="maxSalary" step="any" placeholder="Max Salary (<=)">
-    </div>
-    
-    <div class="export-wrapper">
-        <button id="exportExcelBtn" class="micro-excel-btn">📥 Excel</button>
-    </div>
+<input type="text" id="search" placeholder="Search student / roll / company">
+
+<select id="batchFilter">
+<option value="">All Batches</option>
+</select>
+
+<select id="branchFilter">
+<option value="">All Branches</option>
+</select>
+
+<select id="companyFilter">
+<option value="">All Companies</option>
+</select>
+
+<select id="natureFilter">
+<option value="">Nature of the Company</option>
+</select>
+
+<select id="internFilter">
+<option value="">Internship Type</option>
+</select>
+
+<select id="genderFilter">
+<option value="">All Genders</option>
+</select>
+
 </div>
 
 <div class="table-container">
-    <table id="placementTable">
-        <thead></thead>
-        <tbody></tbody>
-    </table>
+
+<table id="placementTable">
+
+<thead></thead>
+
+<tbody></tbody>
+
+</table>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
 
 <script>
 
-/* CSV URL Link Pointer mapping setup */
+/* CSV URL */
+
 const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSlQ0WjFcZaI2eiKVtAqynVqs3H82MznXaV15n-qLjsDv6QL75g_7sQAhm0n6ZtiiDVKIB0MkuTNQ64/pub?gid=492329818&single=true&output=csv";
 
 let allData=[];
-let currentFilteredData=[];
 
 let natureKey="";
 let internKey="";
-let salaryKey=""; 
 
-/* LOAD DATA FROM PUBLISHED LINK SOURCE */
+/* LOAD CSV */
+
 Papa.parse(csvURL,{
+
 download:true,
+
 header:true,
+
 skipEmptyLines:true,
+
 complete:function(results){
 
-allData = results.data.filter(row => {
-  let combinedRowText = Object.values(row).join("").trim();
-  let lowercaseText = combinedRowText.toLowerCase();
-  return combinedRowText !== "" && 
-         !lowercaseText.includes("displaying index.html") &&
-         !lowercaseText.includes("index.html");
-});
+allData = results.data.filter(
+row => Object.values(row).join("").trim() !== ""
+);
 
 if(allData.length===0){
-alert("No Data Found or Row Structure Invalid");
+
+alert("No Data Found");
+
 return;
+
 }
 
 let headers = Object.keys(allData[0]);
 
-natureKey = headers.find(h => h.toLowerCase().includes("nature"));
-internKey = headers.find(h => h.toLowerCase().includes("paid"));
-salaryKey = headers.find(h => h.toLowerCase().includes("salary") || h.toLowerCase().includes("lpa") || h.toLowerCase().includes("package"));
+natureKey = headers.find(
+h => h.toLowerCase().includes("nature")
+);
 
-currentFilteredData = [...allData];
+internKey = headers.find(
+h => h.toLowerCase().includes("paid")
+);
 
 buildTable(allData);
+
 populateFilters(allData);
+
 updateStats(allData);
+
 },
+
 error:function(err){
+
 console.log(err);
+
 alert("CSV Loading Failed");
+
 }
+
 });
 
-/* BUILD DATA GRID DOM SYSTEM */
+/* BUILD TABLE */
+
 function buildTable(data){
+
 let thead=document.querySelector("#placementTable thead");
+
 let tbody=document.querySelector("#placementTable tbody");
 
 thead.innerHTML="";
+
 tbody.innerHTML="";
 
 if(data.length===0){
-tbody.innerHTML="<tr><td colspan='20'>No Records Found</td></tr>";
+
+tbody.innerHTML=
+"<tr><td colspan='20'>No Records Found</td></tr>";
+
 return;
+
 }
 
 let headers=Object.keys(data[0]);
+
 let tr=document.createElement("tr");
 
+/* HEADERS */
+
 headers.forEach(h=>{
+
 let th=document.createElement("th");
+
 th.innerText=h;
+
 tr.appendChild(th);
+
 });
+
 thead.appendChild(tr);
 
+/* ROWS */
+
 data.forEach(row=>{
+
 let tr=document.createElement("tr");
+
 headers.forEach(h=>{
+
 let td=document.createElement("td");
+
 let value = row[h] ? row[h].toString().trim() : "";
 
 if(value.includes("http")){
+
 let a=document.createElement("a");
+
 a.href=value;
+
 a.target="_blank";
+
 a.className="link-btn";
 
 if(h.toLowerCase().includes("intern")){
-a.innerText="📄 Intern";
-}
-else if(h.toLowerCase().includes("offer")){
-a.innerText="📄 Offer";
-}
-else{
-a.innerText="📄 View";
-}
-td.appendChild(a);
-}
-else{
-td.innerText=value;
-}
-tr.appendChild(td);
-});
-tbody.appendChild(tr);
-});
+
+a.innerText="📄 Internship Letter";
+
 }
 
-/* DYNAMIC DROP MENU GENERATION ARRAY ROUTINES */
+else if(h.toLowerCase().includes("offer")){
+
+a.innerText="📄 Offer Letter";
+
+}
+
+else{
+
+a.innerText="📄 View";
+
+}
+
+td.appendChild(a);
+
+}
+
+else{
+
+td.innerText=value;
+
+}
+
+tr.appendChild(td);
+
+});
+
+tbody.appendChild(tr);
+
+});
+
+}
+
+/* POPULATE FILTERS */
+
 function populateFilters(data){
-let batches=[...new Set(data.map(d=>d["Batch"]).filter(Boolean))];
-let branches=[...new Set(data.map(d=>d["Branch"]).filter(Boolean))];
-let companies=[...new Set(data.map(d=>d["Company Placed"]).filter(Boolean))];
-let natures=[...new Set(data.map(d => (d[natureKey] || "").trim()).filter(v=>v))];
-let interns=[...new Set(data.map(d => (d[internKey] || "").trim()).filter(v=>v))];
-let genders=[...new Set(data.map(d => (d["Gender"] || "").trim()).filter(v=>v))];
+
+let batches=[
+...new Set(data.map(d=>d["Batch"]).filter(Boolean))
+];
+
+let branches=[
+...new Set(data.map(d=>d["Branch"]).filter(Boolean))
+];
+
+let companies=[
+...new Set(data.map(d=>d["Company Placed"]).filter(Boolean))
+];
+
+let natures=[
+...new Set(
+data.map(d => (d[natureKey] || "").trim())
+.filter(v=>v)
+)
+];
+
+let interns=[
+...new Set(
+data.map(d => (d[internKey] || "").trim())
+.filter(v=>v)
+)
+];
+
+let genders=[
+...new Set(
+data.map(d => (d["Gender"] || "").trim())
+.filter(v=>v)
+)
+];
+
+/* SELECTS */
 
 let batchSelect=document.getElementById("batchFilter");
+
 let branchSelect=document.getElementById("branchFilter");
+
 let companySelect=document.getElementById("companyFilter");
+
 let natureSelect=document.getElementById("natureFilter");
+
 let internSelect=document.getElementById("internFilter");
+
 let genderSelect=document.getElementById("genderFilter");
 
+/* RESET */
+
 batchSelect.innerHTML='<option value="">All Batches</option>';
+
 branchSelect.innerHTML='<option value="">All Branches</option>';
+
 companySelect.innerHTML='<option value="">All Companies</option>';
+
 natureSelect.innerHTML='<option value="">Nature of the Company</option>';
+
 internSelect.innerHTML='<option value="">Internship Type</option>';
+
 genderSelect.innerHTML='<option value="">All Genders</option>';
 
-batches.sort().forEach(v=> batchSelect.add(new Option(v,v)));
-branches.sort().forEach(v=> branchSelect.add(new Option(v,v)));
-companies.sort().forEach(v=> companySelect.add(new Option(v,v)));
-natures.sort().forEach(v=> natureSelect.add(new Option(v,v)));
-interns.sort().forEach(v=> internSelect.add(new Option(v,v)));
-genders.sort().forEach(v=> genderSelect.add(new Option(v,v)));
+/* ADD OPTIONS */
+
+batches.sort().forEach(v=>
+batchSelect.add(new Option(v,v))
+);
+
+branches.sort().forEach(v=>
+branchSelect.add(new Option(v,v))
+);
+
+companies.sort().forEach(v=>
+companySelect.add(new Option(v,v))
+);
+
+natures.sort().forEach(v=>
+natureSelect.add(new Option(v,v))
+);
+
+interns.sort().forEach(v=>
+internSelect.add(new Option(v,v))
+);
+
+genders.sort().forEach(v=>
+genderSelect.add(new Option(v,v))
+);
+
 }
 
 function updateCompanyFilter(filteredData){
-let companySelect = document.getElementById("companyFilter");
-let currentValue = companySelect.value;
-let companies = [...new Set(filteredData.map(d => d["Company Placed"]).filter(Boolean))];
 
-companySelect.innerHTML = '<option value="">All Companies</option>';
-companies.sort().forEach(v => companySelect.add(new Option(v,v)));
+let companySelect =
+document.getElementById("companyFilter");
+
+/* CURRENT SELECTION */
+
+let currentValue = companySelect.value;
+
+/* UNIQUE COMPANIES */
+
+let companies = [
+...new Set(
+filteredData
+.map(d => d["Company Placed"])
+.filter(Boolean)
+)
+];
+
+/* RESET */
+
+companySelect.innerHTML =
+'<option value="">All Companies</option>';
+
+/* ADD FILTERED OPTIONS */
+
+companies.sort().forEach(v =>
+companySelect.add(new Option(v,v))
+);
+
+/* RESTORE VALUE IF EXISTS */
 
 if(companies.includes(currentValue)){
+
 companySelect.value = currentValue;
-}
+
 }
 
-/* RECALCULATE LOGS COUNTER STRIPS */
+}
+
+/* UPDATE STATS */
+
 function updateStats(data){
+
 document.getElementById("totalOffers").innerText=data.length;
+
 let uniqueStudents=new Set();
+
 data.forEach(row=>{
-if(row["Roll Number"]) { uniqueStudents.add(row["Roll Number"]); }
+
+uniqueStudents.add(row["Roll Number"]);
+
 });
-document.getElementById("placedStudents").innerText=uniqueStudents.size;
+
+document.getElementById("placedStudents").innerText=
+uniqueStudents.size;
+
 }
 
-/* SEARCH AND MATHEMATICAL RANGE CRITERIA ENGINE */
+/* APPLY FILTERS */
+
 function applyFilters(){
-let search=document.getElementById("search").value.toLowerCase();
-let minSalaryVal = parseFloat(document.getElementById("minSalary").value);
-let maxSalaryVal = parseFloat(document.getElementById("maxSalary").value);
+
+let search=document.getElementById("search")
+.value.toLowerCase();
 
 let batch=document.getElementById("batchFilter").value;
+
 let branch=document.getElementById("branchFilter").value;
+
 let company=document.getElementById("companyFilter").value;
+
 let nature=document.getElementById("natureFilter").value;
+
 let intern=document.getElementById("internFilter").value;
+
 let gender=document.getElementById("genderFilter").value;
 
+/* FILTER */
+
 let filtered=allData.filter(row=>{
+
 let text=JSON.stringify(row).toLowerCase();
-let currentSalaryNum = NaN;
-
-if(salaryKey && row[salaryKey]) {
-  let cleanedStr = row[salaryKey].toString().replace(/[^0-9.]/g, '');
-  if(cleanedStr.trim() !== "") { currentSalaryNum = parseFloat(cleanedStr); }
-}
-
-let fulfillsMinBound = isNaN(minSalaryVal) || (!isNaN(currentSalaryNum) && currentSalaryNum >= minSalaryVal);
-let fulfillsMaxBound = isNaN(maxSalaryVal) || (!isNaN(currentSalaryNum) && currentSalaryNum <= maxSalaryVal);
 
 return text.includes(search)
-&& fulfillsMinBound
-&& fulfillsMaxBound
+
 && (batch==="" || row["Batch"]===batch)
+
 && (branch==="" || row["Branch"]===branch)
+
 && (company==="" || row["Company Placed"]===company)
-&& (nature==="" || (row[natureKey] || "").trim()===nature)
-&& (intern==="" || (row[internKey] || "").trim()===intern)
-&& (gender==="" || (row["Gender"] || "").trim()===gender);
+
+&& (nature==="" ||
+(row[natureKey] || "").trim()===nature)
+
+&& (intern==="" ||
+(row[internKey] || "").trim()===intern)
+
+&& (gender==="" ||
+(row["Gender"] || "").trim()===gender);
+
 });
 
-currentFilteredData = filtered;
-
 updateCompanyFilter(filtered);
+  
 buildTable(filtered);
+
 updateStats(filtered);
+
 }
 
-/* EXCEL SHEET EXPORT UTILITY */
-function handleExcelExport() {
-  if (!currentFilteredData || currentFilteredData.length === 0) {
-    alert("No active records available to download!");
-    return;
-  }
-  
-  let headers = Object.keys(currentFilteredData[0]);
-  let outputCSV = "\uFEFF"; 
-  outputCSV += headers.map(h => `"${h.replace(/"/g, '""')}"`).join(",") + "\r\n";
-  
-  currentFilteredData.forEach(row => {
-    let rowLine = headers.map(h => {
-      let value = row[h] ? row[h].toString().trim() : "";
-      return `"${value.replace(/"/g, '""')}"`;
-    });
-    outputCSV += rowLine.join(",") + "\r\n";
-  });
-  
-  let binaryBlob = new Blob([outputCSV], { type: "text/csv;charset=utf-8;" });
-  let virtualAnchor = document.createElement("a");
-  let objectURL = URL.createObjectURL(binaryBlob);
-  
-  virtualAnchor.setAttribute("href", objectURL);
-  virtualAnchor.setAttribute("download", "MGIT_Filtered_Placements.csv");
-  virtualAnchor.style.visibility = "hidden";
-  document.body.appendChild(virtualAnchor);
-  virtualAnchor.click();
-  document.body.removeChild(virtualAnchor);
-}
+/* EVENTS */
 
-/* CORE RUNTIME BINDING SUBSYSTEM */
-document.getElementById("search").addEventListener("keyup",applyFilters);
-document.getElementById("minSalary").addEventListener("input",applyFilters);
-document.getElementById("maxSalary").addEventListener("input",applyFilters);
-document.getElementById("batchFilter").addEventListener("change",applyFilters);
-document.getElementById("branchFilter").addEventListener("change",applyFilters);
-document.getElementById("companyFilter").addEventListener("change",applyFilters);
-document.getElementById("natureFilter").addEventListener("change",applyFilters);
-document.getElementById("internFilter").addEventListener("change",applyFilters);
-document.getElementById("genderFilter").addEventListener("change",applyFilters);
-document.getElementById("exportExcelBtn").addEventListener("click", handleExcelExport);
+document.getElementById("search")
+.addEventListener("keyup",applyFilters);
+
+document.getElementById("batchFilter")
+.addEventListener("change",applyFilters);
+
+document.getElementById("branchFilter")
+.addEventListener("change",applyFilters);
+
+document.getElementById("companyFilter")
+.addEventListener("change",applyFilters);
+
+document.getElementById("natureFilter")
+.addEventListener("change",applyFilters);
+
+document.getElementById("internFilter")
+.addEventListener("change",applyFilters);
+
+document.getElementById("genderFilter")
+.addEventListener("change",applyFilters);
 
 </script>
 
