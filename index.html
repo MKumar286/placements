@@ -5,7 +5,7 @@
 <title>MGIT Placement Portal</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                                                                           
+                                                                            
 <style>
 
 *{
@@ -76,144 +76,101 @@ to{transform:translateX(-80px);}
 /* HEADER */
 
 .header-box{
-
 background:linear-gradient(135deg,#000814,#001d3d,#003566);
-
 padding:6px 10px;
-
 border-radius:18px 18px 0 0;
-
 margin-bottom:0;
-
 box-shadow:0 6px 20px rgba(0,0,0,0.35);
-
 border:1px solid rgba(255,255,255,0.15);
-
 border-bottom:none;
-
 text-align:center;
-
 }
 
 
 /* HEADINGS */
 
 h1{
-
 font-size:34px;
-
 font-weight:bold;
-
 background:linear-gradient(90deg,#ffffff,#ffe082,#ffffff);
-
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-
 margin-bottom:8px;
-
 letter-spacing:1px;
-
 }
 
 h3{
-
 font-size:18px;
 margin-top:2px;
 font-weight:500;
-
 background:linear-gradient(90deg,#b2ff59,#00e5ff);
-
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-
 }
 
 /* STATS */
 
 .stats{
-
 margin:0;
-
 font-weight:bold;
-
-font-size:18px;
-
+font-size:15px;
 display:flex;
-
 justify-content:center;
-
 gap:25px;
-
 flex-wrap:wrap;
-
-padding:8px 12px;
-
+padding:10px 12px;
 background: linear-gradient(135deg, #064420, #0b6b35);
-
 border-radius:0;
-
 box-shadow:none;
-
 border-left:1px solid rgba(255,255,255,0.15);
-
 border-right:1px solid rgba(255,255,255,0.15);
-
 color:white;
+}
 
+.stats div {
+display: flex;
+align-items: center;
+gap: 6px;
+background: rgba(0, 0, 0, 0.2);
+padding: 4px 12px;
+border-radius: 6px;
+border: 1px solid rgba(255,255,255,0.1);
+}
+
+.stats span {
+color: #ffe082;
+font-size: 16px;
 }
 
 /* FILTER SECTION */
 
 .controls{
-
 margin-bottom:6px;
-
 display:flex;
-
 flex-wrap:wrap;
-
 gap:5px;
-
 background:rgba(255,255,255,0.12);
-
 padding:6px 8px;
-
 border-radius:0 0 14px 14px;
-
 backdrop-filter:blur(10px);
-
 box-shadow:0 6px 20px rgba(0,0,0,0.25);
-
 border:1px solid rgba(255,255,255,0.15);
-
 border-top:none;
-
 }
 /* FILTERS */
 
 .controls input,
 .controls select{
-
 flex: 1 1 150px;
-
 height:30px;
-
 padding:4px 8px;
-
 font-size:12px;
-
 border-radius:8px;
-
 border:1px solid rgba(255,255,255,0.2);
-
 outline:none;
-
 background:rgba(255,255,255,0.92);
-
 color: #000;
-
 transition:0.3s;
-
 }
 
 /* FOCUS */
@@ -221,13 +178,9 @@ transition:0.3s;
 .controls input:focus,
 .controls select:focus,
 .salary-filters-row input:focus{
-
 transform:scale(1.02);
-
 box-shadow:0 0 10px rgba(255,255,255,0.5);
-
 border:1px solid #00c6ff;
-
 }
 
 /* LOWER ACTION LAYER ROW */
@@ -272,14 +225,13 @@ flex: 1 1 auto;
 display: flex;
 justify-content: center;
 align-items: center;
-gap: 15px;
 background: rgba(255, 255, 255, 0.15);
 border: 1px solid rgba(255, 255, 255, 0.25);
 padding: 4px 12px;
 border-radius: 8px;
 backdrop-filter: blur(5px);
 box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-height: 30px; /* Sized exactly as the other operational row filters */
+height: 30px;
 min-width: 250px;
 cursor: pointer;
 color: white;
@@ -298,28 +250,12 @@ transform: translateY(1px);
 }
 
 .card-title-text {
-font-size: 11px;
+font-size: 12px;
 font-weight: bold;
-letter-spacing: 0.3px;
+letter-spacing: 0.5px;
 text-transform: uppercase;
 color: #ffe082;
 white-space: nowrap;
-border-right: 1px solid rgba(255,255,255,0.3);
-padding-right: 10px;
-}
-
-.card-stat-item {
-font-size: 11px;
-font-weight: bold;
-color: #ffffff;
-white-space: nowrap;
-}
-
-.card-stat-item span {
-color: #00e5ff;
-font-size: 12px;
-margin-left: 2px;
-text-shadow: 0 0 4px rgba(0, 229, 255, 0.4);
 }
 
 /* RIGHT SIDE EXCEL ACTION */
@@ -354,155 +290,99 @@ transform: scale(0.97);
 /* TABLE CONTAINER */
 
 .table-container{
-
 width:100%;
-
 overflow-x:auto;
-
 overflow-y:hidden;
-
 border-radius:18px;
-
 box-shadow:0 8px 25px rgba(0,0,0,0.35);
-
 scroll-behavior:smooth;
-
 background:rgba(255,255,255,0.05);
-
 padding-bottom:6px;
-
 }
 
 /* TABLE SCROLLBAR */
 
 .table-container::-webkit-scrollbar{
-
 height:10px;
-
 }
 
 .table-container::-webkit-scrollbar-track{
-
 background:rgba(255,255,255,0.08);
-
 border-radius:10px;
-
 }
 
 .table-container::-webkit-scrollbar-thumb{
-
 background:linear-gradient(90deg,#ff512f,#dd2476);
-
 border-radius:10px;
-
 }
 
 .table-container::-webkit-scrollbar-thumb:hover{
-
 background:linear-gradient(90deg,#00c6ff,#0072ff);
-
 }
 
 /* TABLE */
 
 table{
-
 border-collapse:collapse;
-
 min-width:1600px;
-
 width:max-content;
-
 background:#ffffff;
-
 color:#222;
-
 border-radius:18px;
-
 overflow:hidden;
-
 }
 
 /* TABLE HEADER */
 
 th{
-
 padding:8px 9px;
-
 font-size:13px;
-
 font-weight:bold;
-
 text-align:center;
-
 background:linear-gradient(135deg,#141e30,#243b55);
-
 color:#ffffff;
 line-height:1.3;
 border:1px solid rgba(255,255,255,0.12);
-
 white-space:nowrap;
-
 }
 
 /* TABLE DATA */
 
 td{
-
 padding:5px 9px;
-
 font-size:12px;
-
 font-weight:500;
-
 text-align:center;
-
 white-space:nowrap;
-
 border:1px solid rgba(16,37,66,0.12);
-
 }
 
 /* ROW COLORS */
 
 tr:nth-child(even){
-
 background:#eef5ff;
-
 }
 
 tr:nth-child(odd){
-
 background:#ffffff;
-
 }
 
 /* HOVER */
 
 tbody tr:hover{
-
 background:#ffd180;
-
 transition:0.3s;
-
 }
 
 /* BUTTON */
 
 .link-btn{
-
 background:linear-gradient(135deg,#667eea,#764ba2);
-
 color:white;
-
 padding:3px 8px;
-
 border-radius:6px;
-
 text-decoration:none;
-
 font-size:10px;
-
 font-weight:bold;
   
 line-height:1.2;
@@ -516,15 +396,10 @@ box-shadow:0 3px 10px rgba(0,0,0,0.2);
 }
 
 .link-btn:hover{
-
 transform:scale(1.06);
-
 background:linear-gradient(135deg,#00f2fe,#4facfe) !important; 
-
 box-shadow:0 5px 15px rgba(0, 242, 254, 0.4);
-
 color:#ffffff;
-
 }
 
 /* MOBILE */
@@ -544,9 +419,15 @@ font-size:15px;
 }
 
 .stats{
-font-size:13px;
-gap:12px;
-padding:6px;
+font-size:12px;
+gap:8px;
+padding:8px;
+flex-direction: column;
+align-items: stretch;
+}
+
+.stats div {
+justify-content: space-between;
 }
 
 .controls{
@@ -583,17 +464,6 @@ max-width: none;
 width: 100%;
 height: auto;
 padding: 6px 10px;
-flex-direction: column;
-gap: 3px;
-}
-
-.card-title-text {
-border-right: none;
-padding-right: 0;
-padding-bottom: 2px;
-border-bottom: 1px solid rgba(255,255,255,0.15);
-width: 100%;
-text-align: center;
 }
 
 .micro-excel-btn {
@@ -634,13 +504,28 @@ min-width:1400px;
 <div class="stats">
 
 <div>
-Total Offers :
+💼 Total Offers:
 <span id="totalOffers">0</span>
 </div>
 
 <div>
-Total Placed Students :
+🎓 Placed Students:
 <span id="placedStudents">0</span>
+</div>
+
+<div>
+🚀 Highest Package:
+<span id="highestPackage">0 LPA</span>
+</div>
+
+<div>
+📊 Median Salary:
+<span id="medianSalary">0 LPA</span>
+</div>
+
+<div>
+📈 Avg Salary:
+<span id="avgSalary">0 LPA</span>
 </div>
 
 </div>
@@ -665,9 +550,7 @@ Total Placed Students :
     </div>
     
     <button id="singlePlacementsCard" class="clickable-metrics-card">
-        <div class="card-title-text">Click here Single Placements</div>
-        <div class="card-stat-item">Offers:<span id="cardOffers">0</span></div>
-        <div class="card-stat-item">Placed:<span id="cardPlaced">0</span></div>
+        <div class="card-title-text">🎯 Click here for Single Placements</div>
     </button>
     
     <button id="exportExcelBtn" class="micro-excel-btn">📥 Excel</button>
@@ -990,29 +873,59 @@ companySelect.value = currentValue;
 
 }
 
-/* UPDATE STATS */
-
+/* REAL-TIME DYNAMIC STATS RE-CALCULATION CONTROLLER */
 function updateStats(data){
+// 1. Total Offers: Dynamic count of data rows actively displayed
+document.getElementById("totalOffers").innerText = data.length;
 
-document.getElementById("totalOffers").innerText=allData.length;
+// 2. Placed Students: Unique count of Roll Numbers across active rows
+let uniqueStudents = new Set();
+let salariesList = [];
+let totalSalarySum = 0;
 
-let uniqueStudentsGlobal=new Set();
-allData.forEach(row=>{
-uniqueStudentsGlobal.add(row["Roll Number"]);
+data.forEach(row => {
+    if(row["Roll Number"]) {
+        uniqueStudents.add(row["Roll Number"].toString().trim());
+    }
+    
+    // Parse individual packaging parameters for algorithmic analysis
+    if(salaryKey && row[salaryKey]) {
+        let cleanedStr = row[salaryKey].toString().replace(/[^0-9.]/g, '');
+        if(cleanedStr.trim() !== "") {
+            let num = parseFloat(cleanedStr);
+            if(!isNaN(num)) {
+                salariesList.push(num);
+                totalSalarySum += num;
+            }
+        }
+    }
 });
-document.getElementById("placedStudents").innerText=uniqueStudentsGlobal.size;
+document.getElementById("placedStudents").innerText = uniqueStudents.size;
 
-// Live synchronization updates to the card layout parameters
-document.getElementById("cardOffers").innerText=data.length;
-
-let uniqueStudentsCard=new Set();
-data.forEach(row=>{
-if(row["Roll Number"]) {
-  uniqueStudentsCard.add(row["Roll Number"]);
+// 3. Mathematical Calculations (Max, Median, Mean)
+if(salariesList.length > 0) {
+    // Sort array values chronologically to properly evaluate bounds & thresholds
+    salariesList.sort((a, b) => a - b);
+    
+    let maxSalary = salariesList[salariesList.length - 1];
+    let avgSalary = totalSalarySum / salariesList.length;
+    let medianSalary = 0;
+    
+    let half = Math.floor(salariesList.length / 2);
+    if(salariesList.length % 2 !== 0) {
+        medianSalary = salariesList[half];
+    } else {
+        medianSalary = (salariesList[half - 1] + salariesList[half]) / 2.0;
+    }
+    
+    document.getElementById("highestPackage").innerText = maxSalary.toFixed(2) + " LPA";
+    document.getElementById("medianSalary").innerText = medianSalary.toFixed(2) + " LPA";
+    document.getElementById("avgSalary").innerText = avgSalary.toFixed(2) + " LPA";
+} else {
+    document.getElementById("highestPackage").innerText = "0 LPA";
+    document.getElementById("medianSalary").innerText = "0 LPA";
+    document.getElementById("avgSalary").innerText = "0 LPA";
 }
-});
-document.getElementById("cardPlaced").innerText=uniqueStudentsCard.size;
-
 }
 
 /* APPLY FILTERS */
@@ -1120,7 +1033,6 @@ function handleExcelExport() {
 
 /* CARDS ACTION INTERACTION FUNCTION LAYER */
 function triggerSinglePlacementsAction() {
-  // Pull out students who only hold a single unique placement offer across your dataset records
   let studentOfferCounts = {};
   
   allData.forEach(row => {
@@ -1135,13 +1047,9 @@ function triggerSinglePlacementsAction() {
     return roll && studentOfferCounts[roll] === 1;
   });
 
-  // Rebuild components using extracted single placement datasets
   currentFilteredData = singlePlacedData;
   buildTable(singlePlacedData);
-  
-  // Update live statistics counters within card grid spaces
-  document.getElementById("cardOffers").innerText = singlePlacedData.length;
-  document.getElementById("cardPlaced").innerText = singlePlacedData.length;
+  updateStats(singlePlacedData);
 }
 
 /* EVENTS */
@@ -1176,7 +1084,6 @@ document.getElementById("genderFilter")
 document.getElementById("exportExcelBtn")
 .addEventListener("click", handleExcelExport);
 
-// Hook the interactive action script routing to the clickable mini analytics card
 document.getElementById("singlePlacementsCard")
 .addEventListener("click", triggerSinglePlacementsAction);
 
