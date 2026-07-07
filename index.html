@@ -247,26 +247,32 @@ padding: 6px;
 border: 1px solid #ccc;
 }
 
+/* FIXED: Reconfigured label flex properties to tightly wrap elements */
 .multiselect-option-item {
 display: flex;
 align-items: center;
-gap: 8px;
+gap: 6px; /* Tight, minimal spacing between box and text */
 padding: 6px 8px;
 font-size: 12px;
 cursor: pointer;
 border-radius: 4px;
 user-select: none;
+text-align: left;
+width: 100%;
 }
 
 .multiselect-option-item:hover {
 background: #eef5ff;
 }
 
-.multiselect-option-item input {
+/* FIXED: Overrode global control dimensions preventing full flex-stretch */
+.multiselect-option-item input.company-checkbox {
+flex: 0 0 auto !important; /* Denies stretching or resizing completely */
+width: 14px !important;
+height: 14px !important;
+margin: 0 !important;
+padding: 0 !important;
 cursor: pointer;
-width: 14px;
-height: 14px;
-flex-shrink: 0;
 }
 
 /* FOCUS */
@@ -913,7 +919,7 @@ natures.sort().forEach(v=> natureSelect.add(new Option(v,v)) );
 interns.sort().forEach(v=> internSelect.add(new Option(v,v)) );
 genders.sort().forEach(v=> genderSelect.add(new Option(v,v)) );
 
-/* CONVERT COMPANY DROP DOWN INTO MULTI CHECKBOX ARCHITECTURE Elements */
+/* CONVERT COMPANY DROP DOWN INTO MULTI CHECKBOX ARCHITECTURE */
 let optionsBox = document.getElementById("companyOptionsBox");
 optionsBox.innerHTML = "";
 
@@ -931,7 +937,7 @@ companies.sort().forEach(companyName => {
     });
     
     label.appendChild(checkbox);
-    label.appendChild(document.createTextNode(" " + companyName));
+    label.appendChild(document.createTextNode(companyName));
     optionsBox.appendChild(label);
 });
 
@@ -962,7 +968,7 @@ function updateCompanyButtonText() {
     }
 }
 
-// Close dropdown if user clicks anywhere outside the menu wrapper space box grid bounds
+// Close dropdown if user clicks anywhere outside
 document.addEventListener("click", function(e) {
     let container = document.querySelector(".multiselect-container");
     if (container && !container.contains(e.target)) {
@@ -1030,7 +1036,6 @@ let nature=document.getElementById("natureFilter").value;
 let intern=document.getElementById("internFilter").value;
 let gender=document.getElementById("genderFilter").value;
 
-// Extract selected elements lists targets from custom check tracking arrays
 let selectedCompanies = getSelectedCompanies();
 
 /* STEP 1: Process filters layers arrays dynamically */
@@ -1057,7 +1062,6 @@ return text.includes(search)
 && (batch==="" || row["Batch"]===batch)
 && (branch==="" || row["Branch"]===branch)
 
-// MODIFIED: Check if row company is included within selected multi check tracking options mapping targets list array
 && (selectedCompanies.length === 0 || selectedCompanies.includes(row["Company Placed"]))
 
 && (nature==="" || (row[natureKey] || "").trim()===nature)
@@ -1160,7 +1164,6 @@ function handleGlobalResetFlow() {
   document.getElementById("internFilter").value = "";
   document.getElementById("genderFilter").value = "";
   
-  // FIX: Uncheck all checkboxes within multi select element space container 
   let checkboxes = document.querySelectorAll(".company-checkbox");
   checkboxes.forEach(cb => cb.checked = false);
   updateCompanyButtonText();
