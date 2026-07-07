@@ -151,21 +151,11 @@ text-align: center;
 white-space: nowrap;
 }
 
-.stats div:nth-child(1) {
-background: radial-gradient(circle at top left, rgba(247, 37, 133, 0.25), rgba(10, 25, 47, 0.6)); 
-}
-.stats div:nth-child(2) {
-background: radial-gradient(circle at top left, rgba(0, 180, 216, 0.25), rgba(10, 25, 47, 0.6));  
-}
-.stats div:nth-child(3) {
-background: radial-gradient(circle at top left, rgba(112, 224, 0, 0.25), rgba(10, 25, 47, 0.6));  
-}
-.stats div:nth-child(4) {
-background: radial-gradient(circle at top left, rgba(0, 242, 254, 0.23), rgba(10, 25, 47, 0.6));  
-}
-.stats div:nth-child(5) {
-background: radial-gradient(circle at top left, rgba(255, 0, 150, 0.22), rgba(10, 25, 47, 0.6));  
-}
+.stats div:nth-child(1) { background: radial-gradient(circle at top left, rgba(247, 37, 133, 0.25), rgba(10, 25, 47, 0.6)); }
+.stats div:nth-child(2) { background: radial-gradient(circle at top left, rgba(0, 180, 216, 0.25), rgba(10, 25, 47, 0.6)); }
+.stats div:nth-child(3) { background: radial-gradient(circle at top left, rgba(112, 224, 0, 0.25), rgba(10, 25, 47, 0.6)); }
+.stats div:nth-child(4) { background: radial-gradient(circle at top left, rgba(0, 242, 254, 0.23), rgba(10, 25, 47, 0.6)); }
+.stats div:nth-child(5) { background: radial-gradient(circle at top left, rgba(255, 0, 150, 0.22), rgba(10, 25, 47, 0.6)); }
 
 .icon-offers { color: #64dfdf; }
 .icon-placed { color: #ffe082; }
@@ -195,7 +185,6 @@ box-shadow:0 6px 20px rgba(0,0,0,0.25);
 border:1px solid rgba(255,255,255,0.15);
 border-top:none;
 }
-/* FILTERS */
 
 .controls input,
 .controls select{
@@ -211,11 +200,80 @@ color: #000;
 transition:0.3s;
 }
 
-/* FOCUS */
+/* CUSTOM MULTI-SELECT DROPDOWN SYSTEM */
+.multiselect-container {
+position: relative;
+flex: 1 1 150px;
+height: 30px;
+}
 
+.multiselect-btn {
+width: 100%;
+height: 100%;
+background: rgba(255, 255, 255, 0.92);
+color: #000;
+border: 1px solid rgba(255, 255, 255, 0.2);
+border-radius: 8px;
+padding: 4px 8px;
+font-size: 12px;
+text-align: left;
+cursor: pointer;
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-family: Arial, sans-serif;
+}
+
+.multiselect-btn::after {
+content: '▼';
+font-size: 8px;
+color: #555;
+}
+
+.multiselect-options-box {
+display: none;
+position: absolute;
+top: 32px;
+left: 0;
+width: 100%;
+max-height: 250px;
+overflow-y: auto;
+background: #ffffff;
+color: #000;
+border-radius: 8px;
+box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+z-index: 1000;
+padding: 6px;
+border: 1px solid #ccc;
+}
+
+.multiselect-option-item {
+display: flex;
+align-items: center;
+gap: 8px;
+padding: 6px 8px;
+font-size: 12px;
+cursor: pointer;
+border-radius: 4px;
+user-select: none;
+}
+
+.multiselect-option-item:hover {
+background: #eef5ff;
+}
+
+.multiselect-option-item input {
+cursor: pointer;
+width: 14px;
+height: 14px;
+flex-shrink: 0;
+}
+
+/* FOCUS */
 .controls input:focus,
 .controls select:focus,
-.salary-filters-row input:focus{
+.salary-filters-row input:focus,
+.multiselect-btn:focus{
 transform:scale(1.02);
 box-shadow:0 0 10px rgba(255,255,255,0.5);
 border:1px solid #00c6ff;
@@ -231,7 +289,6 @@ margin: 8px 4px;
 flex-wrap: wrap;
 }
 
-/* Action button right alignment configuration container */
 .right-buttons-row {
 display: flex;
 gap: 8px;
@@ -239,7 +296,6 @@ align-items: center;
 flex-shrink: 0;
 }
 
-/* Salary inputs layout with Title text element */
 .salary-filters-row {
 display: flex;
 gap: 8px;
@@ -353,9 +409,9 @@ box-shadow: 0 4px 10px rgba(0,180,90,0.4);
 transform: scale(0.97);
 }
 
-/* RESET BUTTON STYLING CONFIGURATIONS */
+/* RESET BUTTON STYLING */
 .micro-reset-btn {
-background: linear-gradient(135deg, #d32f2f, #b71c1c); /* Eye-catching Soft Crimson Gradient Layer */
+background: linear-gradient(135deg, #d32f2f, #b71c1c); 
 color: white;
 border: 1px solid rgba(255,255,255,0.2);
 padding: 4px 14px;
@@ -383,7 +439,6 @@ transform: scale(0.97);
 }
 
 /* TABLE CONTAINER */
-
 .table-container{
 width:100%;
 overflow-x:auto;
@@ -394,8 +449,6 @@ scroll-behavior:smooth;
 background:rgba(255,255,255,0.05);
 padding-bottom:6px;
 }
-
-/* TABLE SCROLLBAR */
 
 .table-container::-webkit-scrollbar{
 height:10px;
@@ -416,7 +469,6 @@ background:linear-gradient(90deg,#00c6ff,#0072ff);
 }
 
 /* TABLE */
-
 table{
 border-collapse:collapse;
 min-width:1600px;
@@ -426,8 +478,6 @@ color:#222;
 border-radius:18px;
 overflow:hidden;
 }
-
-/* TABLE HEADER */
 
 th{
 padding:8px 9px;
@@ -441,8 +491,6 @@ border:1px solid rgba(255,255,255,0.12);
 white-space:nowrap;
 }
 
-/* TABLE DATA */
-
 td{
 padding:5px 9px;
 font-size:12px;
@@ -452,22 +500,9 @@ white-space:nowrap;
 border:1px solid rgba(16,37,66,0.12);
 }
 
-/* ROW COLORS */
-
-tr:nth-child(even){
-background:#eef5ff;
-}
-
-tr:nth-child(odd){
-background:#ffffff;
-}
-
-/* HOVER */
-
-tbody tr:hover{
-background:#ffd180;
-transition:0.3s;
-}
+tr:nth-child(even){ background:#eef5ff; }
+tr:nth-child(odd){ background:#ffffff; }
+tbody tr:hover{ background:#ffd180; transition:0.3s; }
 
 /* LINK BUTTON */
 .link-btn{
@@ -492,20 +527,11 @@ color:#ffffff !important;
 }
 
 /* MOBILE RESPONSIVE ADAPTATIONS */
-
 @media(max-width:768px){
 
-body{
-padding:10px;
-}
-
-h1{
-font-size:22px;
-}
-
-h3{
-font-size:15px;
-}
+body{ padding:10px; }
+h1{ font-size:22px; }
+h3{ font-size:15px; }
 
 .stats{
 font-size:12px;
@@ -522,18 +548,17 @@ width: 100%;
 min-width: 0;
 }
 
-.controls{
-padding:5px;
-gap:4px;
-}
+.controls{ padding:5px; gap:4px; }
 
 .controls input,
-.controls select{
+.controls select,
+.multiselect-container {
 flex: 1 1 120px;
 height:28px;
-padding:3px 6px;
 font-size:11px;
 }
+
+.multiselect-btn { font-size:11px; padding: 3px 6px; }
 
 .action-container {
 margin: 4px 2px;
@@ -542,46 +567,15 @@ align-items: stretch;
 gap: 8px;
 }
 
-.salary-filters-row {
-justify-content: space-between;
-width: 100%;
-}
+.salary-filters-row { justify-content: space-between; width: 100%; }
+.salary-filters-row input { width: 35%; max-width: none; }
+.right-buttons-row { width: 100%; justify-content: space-between; gap: 6px; }
+.right-buttons-row button { flex: 1; justify-content: center; }
+.clickable-metrics-card { width: 100%; height: auto; padding: 6px 10px; }
 
-.salary-filters-row input {
-width: 35%;
-max-width: none;
-}
-
-.right-buttons-row {
-width: 100%;
-justify-content: space-between;
-gap: 6px;
-}
-
-.right-buttons-row button {
-flex: 1;
-justify-content: center;
-}
-
-.clickable-metrics-card {
-width: 100%;
-height: auto;
-padding: 6px 10px;
-}
-
-th{
-font-size:11px;
-padding:5px 6px;
-}
-
-td{
-font-size:11px;
-padding:4px 6px;
-}
-
-table{
-min-width:1400px;
-}
+th{ font-size:11px; padding:5px 6px; }
+td{ font-size:11px; padding:4px 6px; }
+table{ min-width:1400px; }
 
 }
 
@@ -634,7 +628,12 @@ min-width:1400px;
 
 <select id="batchFilter"><option value="">All Batches</option></select>
 <select id="branchFilter"><option value="">All Branches</option></select>
-<select id="companyFilter"><option value="">All Companies</option></select>
+
+<div class="multiselect-container">
+    <button id="companyDropdownBtn" class="multiselect-btn" onclick="toggleCompanyDropdown(event)">All Companies</button>
+    <div id="companyOptionsBox" class="multiselect-options-box"></div>
+</div>
+
 <select id="natureFilter"><option value="">Nature of the Company</option></select>
 <select id="internFilter"><option value="">Internship Type</option></select>
 <select id="genderFilter"><option value="">All Genders</option></select>
@@ -736,7 +735,6 @@ salaryKey = headers.find(
 h => h.toLowerCase().includes("salary") || h.toLowerCase().includes("lpa") || h.toLowerCase().includes("package")
 );
 
-// Initial baseline descending package sort configuration
 allData.sort((a, b) => parseSalaryValue(b) - parseSalaryValue(a));
 
 currentFilteredData = [...allData];
@@ -859,7 +857,6 @@ tbody.appendChild(tr);
 }
 
 /* POPULATE FILTERS */
-
 function populateFilters(data){
 
 let batches=[
@@ -896,100 +893,82 @@ data.map(d => (d["Gender"] || "").trim())
 ];
 
 /* SELECTS */
-
 let batchSelect=document.getElementById("batchFilter");
-
 let branchSelect=document.getElementById("branchFilter");
-
-let companySelect=document.getElementById("companyFilter");
-
 let natureSelect=document.getElementById("natureFilter");
-
 let internSelect=document.getElementById("internFilter");
-
 let genderSelect=document.getElementById("genderFilter");
 
 /* RESET */
-
 batchSelect.innerHTML='<option value="">All Batches</option>';
-
 branchSelect.innerHTML='<option value="">All Branches</option>';
-
-companySelect.innerHTML='<option value="">All Companies</option>';
-
 natureSelect.innerHTML='<option value="">Nature of the Company</option>';
-
 internSelect.innerHTML='<option value="">Internship Type</option>';
-
 genderSelect.innerHTML='<option value="">All Genders</option>';
 
 /* ADD OPTIONS */
+batches.sort().forEach(v=> batchSelect.add(new Option(v,v)) );
+branches.sort().forEach(v=> branchSelect.add(new Option(v,v)) );
+natures.sort().forEach(v=> natureSelect.add(new Option(v,v)) );
+interns.sort().forEach(v=> internSelect.add(new Option(v,v)) );
+genders.sort().forEach(v=> genderSelect.add(new Option(v,v)) );
 
-batches.sort().forEach(v=>
-batchSelect.add(new Option(v,v))
-);
+/* CONVERT COMPANY DROP DOWN INTO MULTI CHECKBOX ARCHITECTURE Elements */
+let optionsBox = document.getElementById("companyOptionsBox");
+optionsBox.innerHTML = "";
 
-branches.sort().forEach(v=>
-branchSelect.add(new Option(v,v))
-);
-
-companies.sort().forEach(v=>
-companySelect.add(new Option(v,v))
-);
-
-natures.sort().forEach(v=>
-natureSelect.add(new Option(v,v))
-);
-
-interns.sort().forEach(v=>
-internSelect.add(new Option(v,v))
-);
-
-genders.sort().forEach(v=>
-genderSelect.add(new Option(v,v))
-);
-
-}
-
-function updateCompanyFilter(filteredData){
-
-let companySelect =
-document.getElementById("companyFilter");
-
-/* CURRENT SELECTION */
-
-let currentValue = companySelect.value;
-
-/* UNIQUE COMPANIES */
-
-let companies = [
-...new Set(
-filteredData
-.map(d => d["Company Placed"])
-.filter(Boolean)
-)
-];
-
-/* RESET */
-
-companySelect.innerHTML =
-'<option value="">All Companies</option>';
-
-/* ADD FILTERED OPTIONS */
-
-companies.sort().forEach(v =>
-companySelect.add(new Option(v,v))
-);
-
-/* RESTORE VALUE IF EXISTS */
-
-if(companies.includes(currentValue)){
-
-companySelect.value = currentValue;
+companies.sort().forEach(companyName => {
+    let label = document.createElement("label");
+    label.className = "multiselect-option-item";
+    
+    let checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = companyName;
+    checkbox.className = "company-checkbox";
+    checkbox.addEventListener("change", () => {
+        updateCompanyButtonText();
+        applyFilters();
+    });
+    
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(" " + companyName));
+    optionsBox.appendChild(label);
+});
 
 }
 
+/* TOGGLE CHECKBOX MENU DISPLAY STATE RULES */
+function toggleCompanyDropdown(event) {
+    event.stopPropagation();
+    let box = document.getElementById("companyOptionsBox");
+    box.style.display = (box.style.display === "block") ? "none" : "block";
 }
+
+/* TRACK SELECTED CHECKBOX ENTRIES & ALTER LABELS */
+function getSelectedCompanies() {
+    let checkboxes = document.querySelectorAll(".company-checkbox:checked");
+    return Array.from(checkboxes).map(cb => cb.value);
+}
+
+function updateCompanyButtonText() {
+    let selected = getSelectedCompanies();
+    let btn = document.getElementById("companyDropdownBtn");
+    if (selected.length === 0) {
+        btn.innerText = "All Companies";
+    } else if (selected.length <= 2) {
+        btn.innerText = selected.join(", ");
+    } else {
+        btn.innerText = "Selected (" + selected.length + ")";
+    }
+}
+
+// Close dropdown if user clicks anywhere outside the menu wrapper space box grid bounds
+document.addEventListener("click", function(e) {
+    let container = document.querySelector(".multiselect-container");
+    if (container && !container.contains(e.target)) {
+        document.getElementById("companyOptionsBox").style.display = "none";
+    }
+});
 
 /* REAL-TIME DYNAMIC STATS RE-CALCULATION CONTROLLER */
 function updateStats(data){
@@ -1046,18 +1025,15 @@ let minSalaryVal = parseFloat(document.getElementById("minSalary").value);
 let maxSalaryVal = parseFloat(document.getElementById("maxSalary").value);
 
 let batch=document.getElementById("batchFilter").value;
-
 let branch=document.getElementById("branchFilter").value;
-
-let company=document.getElementById("companyFilter").value;
-
 let nature=document.getElementById("natureFilter").value;
-
 let intern=document.getElementById("internFilter").value;
-
 let gender=document.getElementById("genderFilter").value;
 
-/* STEP 1: Process active dropdown/search filter layers */
+// Extract selected elements lists targets from custom check tracking arrays
+let selectedCompanies = getSelectedCompanies();
+
+/* STEP 1: Process filters layers arrays dynamically */
 let filtered = allData.filter(row=>{
 
 let text=JSON.stringify(row).toLowerCase();
@@ -1079,23 +1055,18 @@ return text.includes(search)
 && fulfillsMaxBound
 
 && (batch==="" || row["Batch"]===batch)
-
 && (branch==="" || row["Branch"]===branch)
 
-&& (company==="" || row["Company Placed"]===company)
+// MODIFIED: Check if row company is included within selected multi check tracking options mapping targets list array
+&& (selectedCompanies.length === 0 || selectedCompanies.includes(row["Company Placed"]))
 
-&& (nature==="" ||
-(row[natureKey] || "").trim()===nature)
-
-&& (intern==="" ||
-(row[internKey] || "").trim()===intern)
-
-&& (gender==="" ||
-(row["Gender"] || "").trim()===gender);
+&& (nature==="" || (row[natureKey] || "").trim()===nature)
+&& (intern==="" || (row[internKey] || "").trim()===intern)
+&& (gender==="" || (row["Gender"] || "").trim()===gender);
 
 });
 
-/* STEP 2: Group and capture unique roll numbers keeping only their highest offer */
+/* STEP 2: Group unique student metrics */
 if (showSinglePlacementsOnly) {
     let groupedByRoll = {};
     
@@ -1119,11 +1090,9 @@ if (showSinglePlacementsOnly) {
     filtered = singleHighestData;
 }
 
-// Sort descending package metrics
 filtered.sort((a, b) => parseSalaryValue(b) - parseSalaryValue(a));
 currentFilteredData = filtered; 
 
-updateCompanyFilter(filtered);
 buildTable(filtered);
 updateStats(filtered);
 
@@ -1179,32 +1148,29 @@ function triggerSinglePlacementsAction() {
   applyFilters();
 }
 
-/* RESET FILTERS ACTION ENGINE */
+/* RESET FILTERS ACTION FLOW ROUTER LINK ENGINE */
 function handleGlobalResetFlow() {
-  // Clear all text and numeric inputs
   document.getElementById("search").value = "";
   document.getElementById("minSalary").value = "";
   document.getElementById("maxSalary").value = "";
   
-  // Clear operational state drop-down selections
   document.getElementById("batchFilter").value = "";
   document.getElementById("branchFilter").value = "";
-  document.getElementById("companyFilter").value = "";
   document.getElementById("natureFilter").value = "";
   document.getElementById("internFilter").value = "";
   document.getElementById("genderFilter").value = "";
   
-  // Force reset Single Placements card back to idle mode
+  // FIX: Uncheck all checkboxes within multi select element space container 
+  let checkboxes = document.querySelectorAll(".company-checkbox");
+  checkboxes.forEach(cb => cb.checked = false);
+  updateCompanyButtonText();
+  
   showSinglePlacementsOnly = false;
   let cardBtn = document.getElementById("singlePlacementsCard");
   let cardText = document.getElementById("cardBtnText");
   cardBtn.classList.remove("active-state");
   cardText.innerText = "🎯 Click here for Single Placements";
   
-  // Restore company options completely first
-  updateCompanyFilter(allData);
-  
-  // Re-trigger global valuation loop using full payload baseline
   applyFilters();
 }
 
@@ -1223,9 +1189,6 @@ document.getElementById("batchFilter")
 .addEventListener("change",applyFilters);
 
 document.getElementById("branchFilter")
-.addEventListener("change",applyFilters);
-
-document.getElementById("companyFilter")
 .addEventListener("change",applyFilters);
 
 document.getElementById("natureFilter")
